@@ -7,6 +7,8 @@
     <title>PML | Mercado Eléctrico Mayorista</title>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
         * {
@@ -364,6 +366,11 @@
                 height: 300px;
             }
         }
+        #mapaEntidades { height: 500px; border-radius: 12px; background: #0a1c2e; border: 1px solid var(--border); z-index: 0; }
+        .leaflet-container { background: #0a1c2e; font-family: Arial, sans-serif; }
+        .mapa-leyenda { display:flex; align-items:center; gap:10px; flex-wrap:wrap; color:var(--muted); font-size:12px; margin-top:12px; }
+        .mapa-gradiente { width:180px; height:12px; border-radius:6px; background:linear-gradient(to right,#bae6fd,#38bdf8,#0369a1,#082f49); }
+        .leaflet-tooltip { color:#0b1727; }
     </style>
 </head>
 
@@ -679,7 +686,9 @@
     <section class="panel" style="margin-top:18px">
         <h2>PML promedio por entidad federativa</h2>
         <div class="descripcion">Promedio simple de las observaciones NodoP-hora de cada entidad dentro de los filtros seleccionados.</div>
-        <div class="chart-box" style="height:420px"><canvas id="graficaEntidades"></canvas></div>
+        <div id="mapaEntidades" aria-label="Mapa de México por entidad federativa"></div>
+        <div id="estadoMapa" class="descripcion" style="margin-top:10px">Cargando límites geográficos de México...</div>
+        <div class="mapa-leyenda"><span>Menor PML</span><div class="mapa-gradiente"></div><span>Mayor PML</span><span>· Gris: sin observaciones</span></div>
         <div class="tabla-wrap" style="margin-top:20px">
             <table><thead><tr><th>Entidad</th><th>NodoP</th><th>Observaciones</th><th>PML promedio</th><th>PML máximo</th><th>PML mínimo</th></tr></thead>
             <tbody id="tablaEntidades"></tbody></table>
@@ -757,7 +766,6 @@ function crearGrafica(id, tipo, labels, datasets, options={}) {
         base.plugins.tooltip.callbacks.label=c=>`${c.raw.toFixed(2)}%`;
         base.scales.x.beginAtZero=true;
     }
-    if(id==='graficaEntidades') {base.indexAxis='y';base.plugins.legend.display=false;}
     charts[id]=new Chart($(id),{type:tipo,data:{labels,datasets},options:{...base,...options}});
 }
 function mostrarKPIs(datos) {
@@ -793,11 +801,70 @@ function mostrarAgrupado(datos,campo,idGrafica,idTabla){
     if(!grupos.length){const tr=document.createElement('tr');const td=document.createElement('td');td.colSpan=idTabla==='tablaEntidades'?6:5;td.textContent='Sin observaciones para la selección.';tr.append(td);$(idTabla).append(tr);return;}
     for(const x of grupos){const tr=document.createElement('tr');const campos=idTabla==='tablaEntidades'?[x.nombre,numero(x.nodos),numero(x.conteo),dinero(x.promedio),dinero(x.max),dinero(x.min)]:[x.nombre,numero(x.nodos),dinero(x.promedio),dinero(x.max),dinero(x.min)];for(const val of campos){const td=document.createElement('td');td.textContent=val;tr.append(td);}$(idTabla).append(tr);}
 }
+
+// MAPA DE ENTIDADES: límites geográficos externos; valores siempre calculados con los filtros activos.
+const GEOJSON_URL='dashboard_data/estados_mexico.geojson';
+const NOMBRES_ESTADOS=['','AGUASCALIENTES','BAJA CALIFORNIA','BAJA CALIFORNIA SUR','CAMPECHE','COAHUILA DE ZARAGOZA','COLIMA','CHIAPAS','CHIHUAHUA','CIUDAD DE MEXICO','DURANGO','GUANAJUATO','GUERRERO','HIDALGO','JALISCO','MEXICO','MICHOACAN DE OCAMPO','MORELOS','NAYARIT','NUEVO LEON','OAXACA','PUEBLA','QUERETARO','QUINTANA ROO','SAN LUIS POTOSI','SINALOA','SONORA','TABASCO','TAMAULIPAS','TLAXCALA','VERACRUZ DE IGNACIO DE LA LLAVE','YUCATAN','ZACATECAS'];
+const ALIAS_ESTADOS={'DISTRITO FEDERAL':'CIUDAD DE MEXICO','VERACRUZ':'VERACRUZ DE IGNACIO DE LA LLAVE','MICHOACAN':'MICHOACAN DE OCAMPO','COAHUILA':'COAHUILA DE ZARAGOZA','ESTADO DE MEXICO':'MEXICO','QUERETARO DE ARTEAGA':'QUERETARO'};
+const normalizarEstado=v=>{const k=String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z ]/g,' ').replace(/\s+/g,' ').trim();return ALIAS_ESTADOS[k]||k;};
+let mapaLeaflet=null, capaEstados=null, limitesGeo=null, geoError=null;
+function claveEstado(feature){
+    const p=feature.properties||{};
+    const c=String(p.CVE_ENT||p.cve_ent||p.CVEGEO||p.cvegeo||p.id||'').padStart(2,'0').slice(0,2);
+    if(/^\d{2}$/.test(c) && Number(c)>=1 && Number(c)<=32)return NOMBRES_ESTADOS[Number(c)];
+    return normalizarEstado(p.NOMGEO||p.nomgeo||p.NOM_ENT||p.name||p.nombre||'');
+}
+async function iniciarMapa(){
+    try{
+        if(!window.L)throw new Error('No se cargó la biblioteca Leaflet');
+        mapaLeaflet=L.map('mapaEntidades',{scrollWheelZoom:false,zoomControl:true,attributionControl:false});
+        const respuesta=await fetch(GEOJSON_URL);
+        if(!respuesta.ok)throw new Error('HTTP '+respuesta.status);
+        limitesGeo=await respuesta.json();
+        if(!limitesGeo.features?.length)throw new Error('El archivo no contiene entidades');
+        actualizarMapa(datosFiltrados());
+        $('estadoMapa').textContent='Selecciona un estado para filtrar la entidad federativa. Pasa el cursor para ver su precio.';
+    }catch(e){geoError=e.message; $('estadoMapa').textContent='No fue posible cargar el mapa geográfico: '+geoError+'. La tabla de entidades sigue disponible.';}
+}
+function colorPrecio(precio,min,max){
+    if(precio===null)return '#455568';
+    const t=max>min?(precio-min)/(max-min):0.5;
+    const a=[186,230,253],b=[3,105,161];
+    return 'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(',')+')';
+}
+function actualizarMapa(datos){
+    if(!mapaLeaflet||!limitesGeo)return;
+    const grupos=agregar(datos,'entidad');
+    const porEstado=new Map(grupos.map(g=>[normalizarEstado(g.nombre),g]));
+    const valores=grupos.map(g=>g.promedio).filter(Number.isFinite);
+    const min=valores.length?Math.min(...valores):0,max=valores.length?Math.max(...valores):0;
+    if(capaEstados)mapaLeaflet.removeLayer(capaEstados);
+    capaEstados=L.geoJSON(limitesGeo,{
+        style:feature=>{const g=porEstado.get(claveEstado(feature));return {color:'#a4b7c9',weight:0.8,fillColor:colorPrecio(g?g.promedio:null,min,max),fillOpacity:0.88};},
+        onEachFeature:(feature,layer)=>{
+            const nombre=claveEstado(feature),g=porEstado.get(nombre);
+            layer.bindTooltip('<strong>'+esc(nombre)+'</strong><br>'+(g?('PML promedio: '+dinero(g.promedio)+'/MWh<br>NodoP: '+numero(g.nodos)+'<br>Observaciones: '+numero(g.conteo)):'Sin observaciones para los filtros actuales'),{sticky:true});
+            layer.on('click',()=>{
+                const opcion=[...$('filtroEntidad').options].find(o=>normalizarEstado(o.value)===nombre);
+                if(opcion){$('filtroEntidad').value=opcion.value;const evento=new Event('change');$('filtroEntidad').dispatchEvent(evento);}
+            });
+        }
+    }).addTo(mapaLeaflet);
+    if(!mapaLeaflet._pmlFit){mapaLeaflet.fitBounds(capaEstados.getBounds(),{padding:[12,12]});mapaLeaflet._pmlFit=true;}
+}
+function mostrarTablaEntidades(datos){
+    const grupos=agregar(datos,'entidad');
+    const tabla=$('tablaEntidades');tabla.replaceChildren();
+    if(!grupos.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=6;td.textContent='Sin observaciones para la selección.';tr.append(td);tabla.append(tr);return;}
+    for(const x of grupos){const tr=document.createElement('tr');for(const v of [x.nombre,numero(x.nodos),numero(x.conteo),dinero(x.promedio),dinero(x.max),dinero(x.min)]){const td=document.createElement('td');td.textContent=v;tr.append(td);}tabla.append(tr);}
+}
+
 function actualizarDashboard(){
     const datos=datosFiltrados();
     mostrarKPIs(datos);mostrarHorario(datos);mostrarDistribucion(datos);
     mostrarAgrupado(datos,'gerencia','graficaGerencias','tablaGerencias');
-    mostrarAgrupado(datos,'entidad','graficaEntidades','tablaEntidades');
+    mostrarTablaEntidades(datos);
+    actualizarMapa(datos);
 }
 async function iniciar(){
     try{
@@ -828,6 +895,7 @@ async function iniciar(){
         });
         $('filtroNodo').addEventListener('change',actualizarDashboard);
         cascada();
+        iniciarMapa();
     }catch(error){console.error(error);$('mensajeError').style.display='block';$('mensajeError').textContent='No fue posible cargar los datos: '+error.message;}
 }
 iniciar();

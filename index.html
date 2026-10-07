@@ -89,7 +89,7 @@
 
         .filtros {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 14px;
             padding: 18px;
             background: rgba(13, 27, 45, .9);
@@ -458,6 +458,11 @@
             </select>
         </div>
 
+        <div class="filtro">
+            <label for="filtroNodo">NodoP</label>
+            <select id="filtroNodo"><option value="TODAS">Todos</option></select>
+        </div>
+
     </section>
 
 
@@ -671,6 +676,16 @@
     </section>
 
 
+    <section class="panel" style="margin-top:18px">
+        <h2>PML promedio por entidad federativa</h2>
+        <div class="descripcion">Promedio simple de las observaciones NodoP-hora de cada entidad dentro de los filtros seleccionados.</div>
+        <div class="chart-box" style="height:420px"><canvas id="graficaEntidades"></canvas></div>
+        <div class="tabla-wrap" style="margin-top:20px">
+            <table><thead><tr><th>Entidad</th><th>NodoP</th><th>Observaciones</th><th>PML promedio</th><th>PML máximo</th><th>PML mínimo</th></tr></thead>
+            <tbody id="tablaEntidades"></tbody></table>
+        </div>
+    </section>
+
     <div class="info">
         Los valores mostrados corresponden a promedios simples
         de las observaciones NodoP-hora disponibles.
@@ -681,1285 +696,141 @@
 
 
 <script>
-
-    // ========================================================
-    // VARIABLES
-    // ========================================================
-
-    let metadata = null;
-    let resumenSistemas = [];
-    let promedioHorario = [];
-    let distribucion = [];
-    let extremos = [];
-    let gerencias = [];
-    let entidades = [];
-    let catalogo = [];
-
-    let chartHorario = null;
-    let chartDistribucion = null;
-    let chartGerencias = null;
-
-
-    // ========================================================
-    // FORMATO
-    // ========================================================
-
-    const formatoDinero = new Intl.NumberFormat(
-        "es-MX",
-        {
-            style: "currency",
-            currency: "MXN",
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }
-    );
-
-
-    const formatoNumero = new Intl.NumberFormat(
-        "es-MX"
-    );
-
-
-    function dinero(valor) {
-
-        if (
-            valor === null ||
-            valor === undefined ||
-            Number.isNaN(Number(valor))
-        ) {
-            return "—";
-        }
-
-        return formatoDinero.format(
-            Number(valor)
-        );
+"use strict";
+const $ = id => document.getElementById(id);
+const dineroFormato = new Intl.NumberFormat('es-MX', {style:'currency',currency:'MXN',minimumFractionDigits:2,maximumFractionDigits:2});
+const numeroFormato = new Intl.NumberFormat('es-MX');
+const dinero = x => Number.isFinite(Number(x)) && x !== null ? dineroFormato.format(Number(x)) : '—';
+const numero = x => numeroFormato.format(x);
+const esc = value => String(value ?? '—').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const RANGOS = ['<0','0-500','500-1,000','1,000-2,000','2,000-5,000','5,000-10,000','10,000 o más'];
+let metadata, catalogo, registros = [], charts = {}, porProcesoSistema = new Map();
+const LLAVE = (s,n) => `${s}\u0000${n}`;
+const avg = (s,n) => n ? s/n : null;
+const fechaMX = fecha => fecha ? fecha.split('-').reverse().join('/') : '—';
+async function cargarJSON(nombre) {
+    const r = await fetch('dashboard_data/'+nombre+'?t='+Date.now());
+    if(!r.ok) throw new Error(`No se pudo cargar ${nombre} (HTTP ${r.status})`);
+    return r.json();
+}
+function elegir(id) {return $(id).value;}
+function actualizarSelect(id, valores, titulo) {
+    const el=$(id), anterior=el.value;
+    el.replaceChildren(new Option(titulo,'TODAS'));
+    valores.sort((a,b)=>a.localeCompare(b,'es')).forEach(v=>el.add(new Option(v,v)));
+    el.value = valores.includes(anterior) ? anterior : 'TODAS';
+}
+function unicos(lista, campo) {return [...new Set(lista.map(x=>x[campo]).filter(x=>x !== null && x !== undefined && x !== ''))];}
+function filtrarBase() {
+    return porProcesoSistema.get(elegir('filtroProceso')+'|'+elegir('filtroSistema')) || [];
+}
+function cascada() {
+    const base=filtrarBase();
+    actualizarSelect('filtroGerencia',unicos(base,'gerencia'),'Todas');
+    const g=elegir('filtroGerencia');
+    const porGerencia=g==='TODAS' ? base : base.filter(x=>x.gerencia===g);
+    actualizarSelect('filtroEntidad',unicos(porGerencia,'entidad'),'Todas');
+    const e=elegir('filtroEntidad');
+    const porEntidad=e==='TODAS' ? porGerencia : porGerencia.filter(x=>x.entidad===e);
+    const nodos=unicos(porEntidad,'nodo');
+    actualizarSelect('filtroNodo',nodos,'Todos');
+    actualizarDashboard();
+}
+function datosFiltrados() {
+    const g=elegir('filtroGerencia'), e=elegir('filtroEntidad'), n=elegir('filtroNodo');
+    return filtrarBase().filter(x=>(g==='TODAS'||x.gerencia===g)&&(e==='TODAS'||x.entidad===e)&&(n==='TODAS'||x.nodo===n));
+}
+function agregar(datos,campo) {
+    const mapa=new Map();
+    for(const x of datos) {
+        const clave=x[campo] || 'Sin dato en catálogo';
+        if(!mapa.has(clave)) mapa.set(clave,{nombre:clave,suma:0,conteo:0,min:Infinity,max:-Infinity,nodos:new Set()});
+        const a=mapa.get(clave);a.suma+=x.pml;a.conteo++;a.min=Math.min(a.min,x.pml);a.max=Math.max(a.max,x.pml);a.nodos.add(x.nodo);
     }
-
-
-    function fechaMX(fecha) {
-
-        if (!fecha) {
-            return "—";
-        }
-
-        const partes = fecha.split("-");
-
-        if (partes.length !== 3) {
-            return fecha;
-        }
-
-        return (
-            partes[2] +
-            "/" +
-            partes[1] +
-            "/" +
-            partes[0]
-        );
+    return [...mapa.values()].map(x=>({nombre:x.nombre,promedio:avg(x.suma,x.conteo),min:x.min,max:x.max,conteo:x.conteo,nodos:x.nodos.size})).sort((a,b)=>b.promedio-a.promedio);
+}
+function crearGrafica(id, tipo, labels, datasets, options={}) {
+    if(charts[id]) charts[id].destroy();
+    const base={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#cbd5e1'}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${dinero(c.raw)}${id==='graficaDistribucion'?'%':'/MWh'}`}}},scales:{x:{ticks:{color:'#8fa8c2'},grid:{color:'rgba(143,168,194,.08)'}},y:{ticks:{color:'#8fa8c2'},grid:{color:'rgba(143,168,194,.08)'}}}};
+    if(id==='graficaDistribucion') {
+        base.indexAxis='y';base.plugins.legend.display=false;
+        base.plugins.tooltip.callbacks.label=c=>`${c.raw.toFixed(2)}%`;
+        base.scales.x.beginAtZero=true;
     }
-
-
-    // ========================================================
-    // CARGAR JSON
-    // ========================================================
-
-    async function cargarJSON(archivo) {
-
-        const respuesta = await fetch(
-            archivo + "?t=" + Date.now()
-        );
-
-        if (!respuesta.ok) {
-
-            throw new Error(
-                "No se pudo cargar " + archivo
-            );
-        }
-
-        return await respuesta.json();
-    }
-
-
-    async function iniciar() {
-
-        try {
-
-            [
-                metadata,
-                resumenSistemas,
-                promedioHorario,
-                distribucion,
-                extremos,
-                gerencias,
-                entidades,
-                catalogo
-            ] = await Promise.all([
-
-                cargarJSON(
-                    "dashboard_data/metadata.json"
-                ),
-
-                cargarJSON(
-                    "dashboard_data/resumen_sistemas.json"
-                ),
-
-                cargarJSON(
-                    "dashboard_data/promedio_horario.json"
-                ),
-
-                cargarJSON(
-                    "dashboard_data/distribucion_pml.json"
-                ),
-
-                cargarJSON(
-                    "dashboard_data/extremos_pml.json"
-                ),
-
-                cargarJSON(
-                    "dashboard_data/resumen_gerencias.json"
-                ),
-
-                cargarJSON(
-                    "dashboard_data/resumen_entidades.json"
-                ),
-
-                cargarJSON(
-                    "dashboard_data/catalogo_nodos.json"
-                )
-
-            ]);
-
-
-            mostrarFechas();
-
-            actualizarFiltrosGeograficos();
-
-            actualizarDashboard();
-
-
-            document
-                .getElementById(
-                    "filtroProceso"
-                )
-                .addEventListener(
-                    "change",
-                    actualizarDashboard
-                );
-
-
-            document
-                .getElementById(
-                    "filtroSistema"
-                )
-                .addEventListener(
-                    "change",
-                    () => {
-
-                        actualizarFiltrosGeograficos();
-                        actualizarDashboard();
-
-                    }
-                );
-
-
-            document
-                .getElementById(
-                    "filtroGerencia"
-                )
-                .addEventListener(
-                    "change",
-                    actualizarDashboard
-                );
-
-
-            document
-                .getElementById(
-                    "filtroEntidad"
-                )
-                .addEventListener(
-                    "change",
-                    actualizarDashboard
-                );
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            const caja =
-                document.getElementById(
-                    "mensajeError"
-                );
-
-            caja.style.display =
-                "block";
-
-            caja.textContent =
-                "No fue posible cargar los datos del dashboard: "
-                + error.message;
-
-        }
-
-    }
-
-
-    // ========================================================
-    // FECHAS
-    // ========================================================
-
-    function mostrarFechas() {
-
-        const fechaMDA =
-            metadata?.procesos?.MDA?.fecha;
-
-        const fechaMTR =
-            metadata?.procesos?.MTR?.fecha;
-
-
-        document.getElementById(
-            "fechasDatos"
-        ).innerHTML =
-
-            "MDA: <strong>"
-            + fechaMX(fechaMDA)
-            + "</strong>"
-            + "<br>"
-            + "MTR: <strong>"
-            + fechaMX(fechaMTR)
-            + "</strong>";
-
-    }
-
-
-    // ========================================================
-    // FILTROS GEOGRÁFICOS
-    // ========================================================
-
-    function actualizarFiltrosGeograficos() {
-
-        const sistema =
-            document.getElementById(
-                "filtroSistema"
-            ).value;
-
-
-        const nodosSistema =
-            catalogo.filter(
-                x =>
-                    x.sistema === sistema
-            );
-
-
-        const listaGerencias = [
-            ...new Set(
-                nodosSistema
-                    .map(
-                        x => x.gerencia
-                    )
-                    .filter(Boolean)
-            )
-        ].sort();
-
-
-        const listaEntidades = [
-            ...new Set(
-                nodosSistema
-                    .map(
-                        x => x.entidad
-                    )
-                    .filter(Boolean)
-            )
-        ].sort();
-
-
-        llenarSelect(
-            "filtroGerencia",
-            listaGerencias
-        );
-
-
-        llenarSelect(
-            "filtroEntidad",
-            listaEntidades
-        );
-
-    }
-
-
-    function llenarSelect(
-        id,
-        valores
-    ) {
-
-        const select =
-            document.getElementById(
-                id
-            );
-
-
-        select.innerHTML =
-            '<option value="TODAS">Todas</option>';
-
-
-        valores.forEach(
-            valor => {
-
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-                option.value =
-                    valor;
-
-                option.textContent =
-                    valor;
-
-                select.appendChild(
-                    option
-                );
-
-            }
-        );
-
-    }
-
-
-    // ========================================================
-    // ACTUALIZAR DASHBOARD
-    // ========================================================
-
-    function actualizarDashboard() {
-
-        const proceso =
-            document.getElementById(
-                "filtroProceso"
-            ).value;
-
-
-        const sistema =
-            document.getElementById(
-                "filtroSistema"
-            ).value;
-
-
-        const gerencia =
-            document.getElementById(
-                "filtroGerencia"
-            ).value;
-
-
-        const entidad =
-            document.getElementById(
-                "filtroEntidad"
-            ).value;
-
-
-        /*
-        IMPORTANTE:
-
-        Los JSON de resumen contienen agregaciones
-        por sistema/proceso.
-
-        Los filtros de Gerencia y Entidad se utilizarán
-        en sus visualizaciones correspondientes.
-
-        Para combinar simultáneamente Gerencia + Entidad
-        necesitaremos generar posteriormente un JSON
-        agregado multidimensional.
-        */
-
-
-        actualizarKPIs(
-            proceso,
-            sistema,
-            gerencia,
-            entidad
-        );
-
-
-        actualizarGraficaHoraria(
-            proceso,
-            sistema
-        );
-
-
-        actualizarDistribucion(
-            proceso,
-            sistema
-        );
-
-
-        actualizarExtremos(
-            proceso,
-            sistema
-        );
-
-
-        actualizarGerencias(
-            proceso,
-            sistema,
-            gerencia
-        );
-
-    }
-
-
-    // ========================================================
-    // KPIs
-    // ========================================================
-
-    function actualizarKPIs(
-        proceso,
-        sistema,
-        gerencia,
-        entidad
-    ) {
-
-        let registro = null;
-
-
-        if (
-            gerencia !== "TODAS"
-        ) {
-
-            const g =
-                gerencias.find(
-                    x =>
-                        x.proceso === proceso &&
-                        x.sistema === sistema &&
-                        x.gerencia === gerencia
-                );
-
-            if (g) {
-
-                registro = {
-                    pml_promedio:
-                        g.pml_promedio,
-
-                    pml_max:
-                        g.pml_max,
-
-                    pml_min:
-                        g.pml_min,
-
-                    nodos:
-                        g.nodos,
-
-                    observaciones:
-                        null
-                };
-
-            }
-
-        }
-
-
-        if (
-            !registro &&
-            entidad !== "TODAS"
-        ) {
-
-            const e =
-                entidades.find(
-                    x =>
-                        x.proceso === proceso &&
-                        x.sistema === sistema &&
-                        x.entidad === entidad
-                );
-
-            if (e) {
-
-                registro = {
-                    pml_promedio:
-                        e.pml_promedio,
-
-                    pml_max:
-                        e.pml_max,
-
-                    pml_min:
-                        e.pml_min,
-
-                    nodos:
-                        e.nodos,
-
-                    observaciones:
-                        null
-                };
-
-            }
-
-        }
-
-
-        if (!registro) {
-
-            registro =
-                resumenSistemas.find(
-                    x =>
-                        x.proceso === proceso &&
-                        x.sistema === sistema
-                );
-
-        }
-
-
-        if (!registro) {
-            return;
-        }
-
-
-        document.getElementById(
-            "kpiPromedio"
-        ).textContent =
-            dinero(
-                registro.pml_promedio
-            );
-
-
-        document.getElementById(
-            "kpiMax"
-        ).textContent =
-            dinero(
-                registro.pml_max
-            );
-
-
-        document.getElementById(
-            "kpiMin"
-        ).textContent =
-            dinero(
-                registro.pml_min
-            );
-
-
-        document.getElementById(
-            "kpiNodos"
-        ).textContent =
-            formatoNumero.format(
-                registro.nodos || 0
-            );
-
-
-        document.getElementById(
-            "kpiObservaciones"
-        ).textContent =
-
-            registro.observaciones
-                ?
-                formatoNumero.format(
-                    registro.observaciones
-                )
-                + " observaciones"
-                :
-                "NodoP considerados";
-
-
-        const resumen =
-            resumenSistemas.find(
-                x =>
-                    x.proceso === proceso &&
-                    x.sistema === sistema
-            );
-
-
-        document.getElementById(
-            "kpiMaxDetalle"
-        ).textContent =
-
-            resumen
-                ?
-                resumen.pml_max_nodo
-                + " · H"
-                + resumen.pml_max_hora
-                :
-                "—";
-
-
-        document.getElementById(
-            "kpiMinDetalle"
-        ).textContent =
-
-            resumen
-                ?
-                resumen.pml_min_nodo
-                + " · H"
-                + resumen.pml_min_hora
-                :
-                "—";
-
-    }
-
-
-    // ========================================================
-    // GRÁFICA HORARIA
-    // ========================================================
-
-    function actualizarGraficaHoraria(
-        proceso,
-        sistema
-    ) {
-
-        const datos =
-            promedioHorario.filter(
-                x =>
-                    x.proceso === proceso &&
-                    x.sistema === sistema
-            );
-
-
-        if (chartHorario) {
-            chartHorario.destroy();
-        }
-
-
-        chartHorario =
-            new Chart(
-                document.getElementById(
-                    "graficaHoraria"
-                ),
-                {
-                    type: "line",
-
-                    data: {
-
-                        labels:
-                            datos.map(
-                                x =>
-                                    "H" + x.hora
-                            ),
-
-                        datasets: [
-
-                            {
-                                label: "PML",
-                                data:
-                                    datos.map(
-                                        x => x.pml
-                                    ),
-                                borderColor:
-                                    "#38bdf8",
-                                backgroundColor:
-                                    "rgba(56,189,248,.12)",
-                                borderWidth: 3,
-                                pointRadius: 2,
-                                tension: .25
-                            },
-
-                            {
-                                label: "Energía",
-                                data:
-                                    datos.map(
-                                        x => x.energia
-                                    ),
-                                borderColor:
-                                    "#34d399",
-                                borderWidth: 2,
-                                pointRadius: 1,
-                                tension: .25
-                            },
-
-                            {
-                                label: "Pérdidas",
-                                data:
-                                    datos.map(
-                                        x => x.perdidas
-                                    ),
-                                borderColor:
-                                    "#f59e0b",
-                                borderWidth: 2,
-                                pointRadius: 1,
-                                tension: .25
-                            },
-
-                            {
-                                label: "Congestión",
-                                data:
-                                    datos.map(
-                                        x => x.congestion
-                                    ),
-                                borderColor:
-                                    "#fb7185",
-                                borderWidth: 2,
-                                pointRadius: 1,
-                                tension: .25
-                            }
-
-                        ]
-                    },
-
-                    options: {
-
-                        responsive: true,
-                        maintainAspectRatio: false,
-
-                        interaction: {
-                            mode: "index",
-                            intersect: false
-                        },
-
-                        plugins: {
-
-                            legend: {
-                                labels: {
-                                    color: "#cbd5e1"
-                                }
-                            },
-
-                            tooltip: {
-
-                                callbacks: {
-
-                                    label: function(context) {
-
-                                        return (
-                                            context.dataset.label
-                                            + ": "
-                                            + dinero(
-                                                context.raw
-                                            )
-                                            + "/MWh"
-                                        );
-
-                                    }
-
-                                }
-
-                            }
-
-                        },
-
-                        scales: {
-
-                            x: {
-
-                                ticks: {
-                                    color: "#8fa8c2"
-                                },
-
-                                grid: {
-                                    color:
-                                        "rgba(143,168,194,.08)"
-                                }
-
-                            },
-
-                            y: {
-
-                                ticks: {
-
-                                    color: "#8fa8c2",
-
-                                    callback:
-                                        function(value) {
-
-                                            return "$"
-                                                + formatoNumero.format(
-                                                    value
-                                                );
-
-                                        }
-
-                                },
-
-                                grid: {
-                                    color:
-                                        "rgba(143,168,194,.08)"
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-                }
-            );
-
-    }
-
-
-    // ========================================================
-    // DISTRIBUCIÓN
-    // ========================================================
-
-    function actualizarDistribucion(
-        proceso,
-        sistema
-    ) {
-
-        const datos =
-            distribucion.filter(
-                x =>
-                    x.proceso === proceso &&
-                    x.sistema === sistema
-            );
-
-
-        if (chartDistribucion) {
-            chartDistribucion.destroy();
-        }
-
-
-        chartDistribucion =
-            new Chart(
-                document.getElementById(
-                    "graficaDistribucion"
-                ),
-                {
-                    type: "bar",
-
-                    data: {
-
-                        labels:
-                            datos.map(
-                                x => x.rango
-                            ),
-
-                        datasets: [
-
-                            {
-                                label:
-                                    "Participación (%)",
-
-                                data:
-                                    datos.map(
-                                        x =>
-                                            x.participacion
-                                    ),
-
-                                backgroundColor: [
-                                    "#fb7185",
-                                    "#38bdf8",
-                                    "#22d3ee",
-                                    "#34d399",
-                                    "#a78bfa",
-                                    "#f59e0b",
-                                    "#ef4444"
-                                ],
-
-                                borderWidth: 0
-                            }
-
-                        ]
-
-                    },
-
-                    options: {
-
-                        indexAxis: "y",
-
-                        responsive: true,
-                        maintainAspectRatio: false,
-
-                        plugins: {
-
-                            legend: {
-                                display: false
-                            },
-
-                            tooltip: {
-
-                                callbacks: {
-
-                                    label:
-                                        function(context) {
-
-                                            return (
-                                                context.raw
-                                                + "%"
-                                            );
-
-                                        }
-
-                                }
-
-                            }
-
-                        },
-
-                        scales: {
-
-                            x: {
-
-                                beginAtZero: true,
-
-                                ticks: {
-
-                                    color: "#8fa8c2",
-
-                                    callback:
-                                        value =>
-                                            value + "%"
-
-                                },
-
-                                grid: {
-                                    color:
-                                        "rgba(143,168,194,.08)"
-                                }
-
-                            },
-
-                            y: {
-
-                                ticks: {
-                                    color: "#cbd5e1"
-                                },
-
-                                grid: {
-                                    display: false
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-                }
-            );
-
-    }
-
-
-    // ========================================================
-    // EXTREMOS
-    // ========================================================
-
-    function actualizarExtremos(
-        proceso,
-        sistema
-    ) {
-
-        const maximo =
-            extremos.find(
-                x =>
-                    x.proceso === proceso &&
-                    x.sistema === sistema &&
-                    x.tipo === "MAX"
-            );
-
-
-        const minimo =
-            extremos.find(
-                x =>
-                    x.proceso === proceso &&
-                    x.sistema === sistema &&
-                    x.tipo === "MIN"
-            );
-
-
-        document.getElementById(
-            "extremoMax"
-        ).innerHTML =
-            crearHTMLextremo(
-                "PML MÁXIMO",
-                maximo,
-                "red"
-            );
-
-
-        document.getElementById(
-            "extremoMin"
-        ).innerHTML =
-            crearHTMLextremo(
-                "PML MÍNIMO",
-                minimo,
-                "green"
-            );
-
-    }
-
-
-    function crearHTMLextremo(
-        titulo,
-        dato,
-        clase
-    ) {
-
-        if (!dato) {
-            return "Sin información";
-        }
-
-
-        return `
-            <div class="tipo">
-                ${titulo}
-            </div>
-
-            <div class="precio ${clase}">
-                ${dinero(dato.pml)}
-            </div>
-
-            <p>
-                <strong>NodoP:</strong>
-                ${dato.nodo || "—"}
-            </p>
-
-            <p>
-                <strong>Nombre:</strong>
-                ${dato.nombre || "—"}
-            </p>
-
-            <p>
-                <strong>Hora:</strong>
-                H${dato.hora}
-            </p>
-
-            <p>
-                <strong>Entidad:</strong>
-                ${dato.entidad || "—"}
-            </p>
-
-            <p>
-                <strong>Municipio:</strong>
-                ${dato.municipio || "—"}
-            </p>
-
-            <p>
-                <strong>Energía:</strong>
-                ${dinero(dato.energia)}
-            </p>
-
-            <p>
-                <strong>Pérdidas:</strong>
-                ${dinero(dato.perdidas)}
-            </p>
-
-            <p>
-                <strong>Congestión:</strong>
-                ${dinero(dato.congestion)}
-            </p>
-        `;
-
-    }
-
-
-    // ========================================================
-    // GERENCIAS
-    // ========================================================
-
-    function actualizarGerencias(
-        proceso,
-        sistema,
-        filtroGerencia
-    ) {
-
-        let datos =
-            gerencias.filter(
-                x =>
-                    x.proceso === proceso &&
-                    x.sistema === sistema
-            );
-
-
-        if (
-            filtroGerencia !== "TODAS"
-        ) {
-
-            datos =
-                datos.filter(
-                    x =>
-                        x.gerencia
-                        === filtroGerencia
-                );
-
-        }
-
-
-        datos.sort(
-            (a, b) =>
-                b.pml_promedio
-                -
-                a.pml_promedio
-        );
-
-
-        // GRÁFICA
-
-        if (chartGerencias) {
-            chartGerencias.destroy();
-        }
-
-
-        chartGerencias =
-            new Chart(
-                document.getElementById(
-                    "graficaGerencias"
-                ),
-                {
-                    type: "bar",
-
-                    data: {
-
-                        labels:
-                            datos.map(
-                                x => x.gerencia
-                            ),
-
-                        datasets: [
-
-                            {
-                                label:
-                                    "PML promedio",
-
-                                data:
-                                    datos.map(
-                                        x =>
-                                            x.pml_promedio
-                                    ),
-
-                                backgroundColor:
-                                    "#38bdf8"
-                            }
-
-                        ]
-
-                    },
-
-                    options: {
-
-                        responsive: true,
-                        maintainAspectRatio: false,
-
-                        plugins: {
-
-                            legend: {
-                                display: false
-                            },
-
-                            tooltip: {
-
-                                callbacks: {
-
-                                    label:
-                                        context =>
-                                            dinero(
-                                                context.raw
-                                            )
-                                            + "/MWh"
-
-                                }
-
-                            }
-
-                        },
-
-                        scales: {
-
-                            x: {
-
-                                ticks: {
-                                    color: "#8fa8c2"
-                                },
-
-                                grid: {
-                                    display: false
-                                }
-
-                            },
-
-                            y: {
-
-                                beginAtZero: true,
-
-                                ticks: {
-
-                                    color: "#8fa8c2",
-
-                                    callback:
-                                        value =>
-                                            "$"
-                                            + formatoNumero.format(
-                                                value
-                                            )
-
-                                },
-
-                                grid: {
-                                    color:
-                                        "rgba(143,168,194,.08)"
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-                }
-            );
-
-
-        // TABLA
-
-        const tbody =
-            document.getElementById(
-                "tablaGerencias"
-            );
-
-
-        tbody.innerHTML = "";
-
-
-        datos.forEach(
-            dato => {
-
-                const fila =
-                    document.createElement(
-                        "tr"
-                    );
-
-
-                fila.innerHTML = `
-
-                    <td>
-                        ${dato.gerencia}
-                    </td>
-
-                    <td>
-                        ${formatoNumero.format(
-                            dato.nodos
-                        )}
-                    </td>
-
-                    <td class="precio-tabla">
-                        ${dinero(
-                            dato.pml_promedio
-                        )}
-                    </td>
-
-                    <td>
-                        ${dinero(
-                            dato.pml_max
-                        )}
-                    </td>
-
-                    <td>
-                        ${dinero(
-                            dato.pml_min
-                        )}
-                    </td>
-
-                `;
-
-
-                tbody.appendChild(
-                    fila
-                );
-
-            }
-        );
-
-    }
-
-
-    // ========================================================
-    // INICIAR
-    // ========================================================
-
-    iniciar();
-
+    if(id==='graficaEntidades') {base.indexAxis='y';base.plugins.legend.display=false;}
+    charts[id]=new Chart($(id),{type:tipo,data:{labels,datasets},options:{...base,...options}});
+}
+function mostrarKPIs(datos) {
+    let suma=0, max=null,min=null;const nodos=new Set();
+    for(const x of datos){suma+=x.pml;nodos.add(x.nodo);if(!max||x.pml>max.pml)max=x;if(!min||x.pml<min.pml)min=x;}
+    $('kpiPromedio').textContent=dinero(avg(suma,datos.length));
+    $('kpiMax').textContent=dinero(max?.pml ?? null);
+    $('kpiMin').textContent=dinero(min?.pml ?? null);
+    $('kpiNodos').textContent=numero(nodos.size);
+    $('kpiObservaciones').textContent=numero(datos.length)+' observaciones';
+    $('kpiMaxDetalle').textContent=max?`${max.nodo} · H${max.hora}`:'—';
+    $('kpiMinDetalle').textContent=min?`${min.nodo} · H${min.hora}`:'—';
+    const detalle=(x,t)=>!x?'Sin información para los filtros seleccionados':`<div class="tipo">${t}</div><div class="precio ${t.includes('MÁXIMO')?'red':'green'}">${dinero(x.pml)}</div><p><strong>NodoP:</strong> ${esc(x.nodo)}</p><p><strong>Nombre:</strong> ${esc(x.nombre)}</p><p><strong>Hora:</strong> H${x.hora}</p><p><strong>Gerencia:</strong> ${esc(x.gerencia)}</p><p><strong>Entidad:</strong> ${esc(x.entidad)}</p><p><strong>Municipio:</strong> ${esc(x.municipio)}</p><p><strong>Energía:</strong> ${dinero(x.energia)}</p><p><strong>Pérdidas:</strong> ${dinero(x.perdidas)}</p><p><strong>Congestión:</strong> ${dinero(x.congestion)}</p>`;
+    $('extremoMax').innerHTML=detalle(max,'PML MÁXIMO');
+    $('extremoMin').innerHTML=detalle(min,'PML MÍNIMO');
+}
+function mostrarHorario(datos){
+    const grupos=Array.from({length:24},()=>({n:0,pml:0,energia:0,perdidas:0,congestion:0}));
+    for(const x of datos){if(x.hora<1||x.hora>24)continue;const a=grupos[x.hora-1];a.n++;for(const k of ['pml','energia','perdidas','congestion'])a[k]+=x[k];}
+    const colores={pml:'#38bdf8',energia:'#34d399',perdidas:'#f59e0b',congestion:'#fb7185'};
+    const nombres={pml:'PML',energia:'Energía',perdidas:'Pérdidas',congestion:'Congestión'};
+    crearGrafica('graficaHoraria','line',grupos.map((_,i)=>'H'+(i+1)),Object.keys(colores).map(k=>({label:nombres[k],data:grupos.map(a=>avg(a[k],a.n)),borderColor:colores[k],borderWidth:k==='pml'?3:2,pointRadius:1,tension:.25})));
+}
+function mostrarDistribucion(datos){
+    const cuenta=Array(7).fill(0);
+    for(const x of datos){const p=x.pml;cuenta[p<0?0:p<500?1:p<1000?2:p<2000?3:p<5000?4:p<10000?5:6]++;}
+    crearGrafica('graficaDistribucion','bar',RANGOS,[{label:'Participación (%)',data:cuenta.map(n=>datos.length?100*n/datos.length:0),backgroundColor:['#fb7185','#38bdf8','#22d3ee','#34d399','#a78bfa','#f59e0b','#ef4444']}]);
+}
+function mostrarAgrupado(datos,campo,idGrafica,idTabla){
+    const grupos=agregar(datos,campo);
+    crearGrafica(idGrafica,'bar',grupos.map(x=>x.nombre),[{label:'PML promedio',data:grupos.map(x=>x.promedio),backgroundColor:'#38bdf8'}]);
+    $(idTabla).replaceChildren();
+    if(!grupos.length){const tr=document.createElement('tr');const td=document.createElement('td');td.colSpan=idTabla==='tablaEntidades'?6:5;td.textContent='Sin observaciones para la selección.';tr.append(td);$(idTabla).append(tr);return;}
+    for(const x of grupos){const tr=document.createElement('tr');const campos=idTabla==='tablaEntidades'?[x.nombre,numero(x.nodos),numero(x.conteo),dinero(x.promedio),dinero(x.max),dinero(x.min)]:[x.nombre,numero(x.nodos),dinero(x.promedio),dinero(x.max),dinero(x.min)];for(const val of campos){const td=document.createElement('td');td.textContent=val;tr.append(td);}$(idTabla).append(tr);}
+}
+function actualizarDashboard(){
+    const datos=datosFiltrados();
+    mostrarKPIs(datos);mostrarHorario(datos);mostrarDistribucion(datos);
+    mostrarAgrupado(datos,'gerencia','graficaGerencias','tablaGerencias');
+    mostrarAgrupado(datos,'entidad','graficaEntidades','tablaEntidades');
+}
+async function iniciar(){
+    try{
+        const [meta,cat,observaciones]=await Promise.all([cargarJSON('metadata.json'),cargarJSON('catalogo_nodos.json'),cargarJSON('datos_dashboard.json')]);
+        metadata=meta;catalogo=cat;
+        if(observaciones.version!==1 || !Array.isArray(observaciones.registros))throw new Error('Formato inesperado en datos_dashboard.json');
+        const columnas=['proceso','sistema','nodo','hora','pml','energia','perdidas','congestion'];
+        if(JSON.stringify(observaciones.columnas)!==JSON.stringify(columnas))throw new Error('Columnas inesperadas en datos_dashboard.json');
+        const nodos=new Map(catalogo.map(x=>[LLAVE(x.sistema,x.nodo),x]));
+        registros=observaciones.registros.map(r=>{
+            const c=nodos.get(LLAVE(r[1],r[2]));
+            if(!c)throw new Error(`NodoP sin catálogo: ${r[1]} ${r[2]}`);
+            const x={proceso:r[0],sistema:r[1],nodo:r[2],hora:r[3],pml:r[4],energia:r[5],perdidas:r[6],congestion:r[7],gerencia:c.centro_control || 'Sin dato en catálogo',entidad:c.entidad || 'Sin dato en catálogo',municipio:c.municipio,nombre:c.nombre};
+            if(!Number.isFinite(x.pml)||!Number.isFinite(x.energia)||!Number.isFinite(x.perdidas)||!Number.isFinite(x.congestion))throw new Error(`Precio inválido: ${x.nodo}`);
+            const llave=x.proceso+'|'+x.sistema;
+            if(!porProcesoSistema.has(llave))porProcesoSistema.set(llave,[]);
+            porProcesoSistema.get(llave).push(x);
+            return x;
+        });
+        $('fechasDatos').innerHTML=`MDA: <strong>${esc(fechaMX(metadata?.procesos?.MDA?.fecha))}</strong><br>MTR: <strong>${esc(fechaMX(metadata?.procesos?.MTR?.fecha))}</strong>`;
+        $('filtroProceso').addEventListener('change',cascada);
+        $('filtroSistema').addEventListener('change',cascada);
+        $('filtroGerencia').addEventListener('change',cascada);
+        $('filtroEntidad').addEventListener('change',()=>{
+            const base=filtrarBase(),g=elegir('filtroGerencia'),e=elegir('filtroEntidad');
+            const nodos=unicos(base.filter(x=>(g==='TODAS'||x.gerencia===g)&&(e==='TODAS'||x.entidad===e)),'nodo');
+            actualizarSelect('filtroNodo',nodos,'Todos');actualizarDashboard();
+        });
+        $('filtroNodo').addEventListener('change',actualizarDashboard);
+        cascada();
+    }catch(error){console.error(error);$('mensajeError').style.display='block';$('mensajeError').textContent='No fue posible cargar los datos: '+error.message;}
+}
+iniciar();
 </script>
 
 </body>

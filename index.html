@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Prueba SW-PML CENACE</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f4f6f8;
+            color: #1f2937;
+        }
+
+        .contenedor {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+        }
+
+        h1 {
+            color: #0f4c81;
+        }
+
+        button {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0f4c81;
+        }
+
+        #estado {
+            margin-top: 25px;
+            font-weight: bold;
+        }
+
+        #resultado {
+            margin-top: 20px;
+            background-color: #111827;
+            color: #e5e7eb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>⚡ Prueba SW-PML CENACE</h1>
+
+        <p>
+            Esta página intentará consultar directamente
+            el Servicio Web de Precios Marginales Locales de CENACE.
+        </p>
+
+        <p>
+            <strong>Sistema:</strong> SIN<br>
+            <strong>Proceso:</strong> MDA<br>
+            <strong>NodoP:</strong> 01PLO-115<br>
+            <strong>Fecha:</strong> 07/11/2017
+        </p>
+
+        <button onclick="consultarCENACE()">
+            Consultar CENACE
+        </button>
+
+        <div id="estado">
+            Esperando consulta...
+        </div>
+
+        <pre id="resultado"></pre>
+
+    </div>
+
+
+    <script>
+
+        async function consultarCENACE() {
+
+            const estado =
+                document.getElementById("estado");
+
+            const resultado =
+                document.getElementById("resultado");
+
+
+            estado.textContent =
+                "Consultando CENACE...";
+
+            resultado.textContent = "";
+
+
+            const url =
+                "https://ws01.cenace.gob.mx:8082/SWPML/SIM/SIN/MDA/01PLO-115/2017/11/07/2017/11/07/JSON";
+
+
+            try {
+
+                const respuesta =
+                    await fetch(url);
+
+
+                estado.textContent =
+                    "Respuesta recibida. Código HTTP: "
+                    + respuesta.status;
+
+
+                const texto =
+                    await respuesta.text();
+
+
+                resultado.textContent = texto;
+
+
+            } catch (error) {
+
+                estado.textContent =
+                    "La consulta no pudo completarse.";
+
+                resultado.textContent =
+                    "ERROR:\n\n" + error;
+
+                console.error(error);
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>

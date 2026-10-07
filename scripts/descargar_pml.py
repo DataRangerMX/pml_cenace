@@ -1,55 +1,55 @@
 import json
 import urllib.request
 import urllib.error
+
+from datetime import datetime, timedelta
 from pathlib import Path
 
 
 # ============================================================
-# CONFIGURACIÓN DE LA CONSULTA
+# CONFIGURACIÓN
 # ============================================================
 
 SISTEMA = "SIN"
 PROCESO = "MDA"
 NODO = "01PLO-115"
 
-FECHA_INICIO = "2017/11/07"
-FECHA_FIN = "2017/11/07"
+# Cuántos días hacia atrás probar si no encontramos información
+MAX_DIAS_BUSQUEDA = 10
 
 
 # ============================================================
-# CONSTRUIR URL DEL SW-PML
+# FUNCIÓN PARA CONSTRUIR LA URL
 # ============================================================
 
-url = (
-    "https://ws01.cenace.gob.mx:8082/"
-    "SWPML/SIM/"
-    f"{SISTEMA}/"
-    f"{PROCESO}/"
-    f"{NODO}/"
-    f"{FECHA_INICIO}/"
-    f"{FECHA_FIN}/"
-    "JSON"
-)
+def construir_url(fecha):
 
+    fecha_url = fecha.strftime("%Y/%m/%d")
 
-print("=" * 60)
-print("PRUEBA SW-PML CENACE")
-print("=" * 60)
-
-print(f"Sistema : {SISTEMA}")
-print(f"Proceso : {PROCESO}")
-print(f"NodoP   : {NODO}")
-print(f"URL     : {url}")
-
-print()
-print("Intentando conectar con CENACE...")
+    return (
+        "https://ws01.cenace.gob.mx:8082/"
+        "SWPML/SIM/"
+        f"{SISTEMA}/"
+        f"{PROCESO}/"
+        f"{NODO}/"
+        f"{fecha_url}/"
+        f"{fecha_url}/"
+        "JSON"
+    )
 
 
 # ============================================================
-# REALIZAR CONSULTA
+# FUNCIÓN PARA CONSULTAR CENACE
 # ============================================================
 
-try:
+def consultar_cenace(fecha):
+
+    url = construir_url(fecha)
+
+    print()
+    print("=" * 70)
+    print(f"Probando fecha: {fecha.strftime('%Y-%m-%d')}")
+    print(f"URL: {url}")
 
     request = urllib.request.Request(
         url,
@@ -58,87 +58,301 @@ try:
         }
     )
 
-    with urllib.request.urlopen(
-        request,
-        timeout=30
-    ) as response:
+    try:
 
-        status = response.status
+        with urllib.request.urlopen(
+            request,
+            timeout=30
+        ) as response:
 
-        contenido = response.read().decode("utf-8")
+            contenido = (
+                response
+                .read()
+                .decode("utf-8")
+            )
 
+        datos = json.loads(contenido)
 
-    print()
-    print("CONEXIÓN EXITOSA")
-    print(f"Código HTTP: {status}")
-
-    print()
-    print("Primeros 500 caracteres recibidos:")
-    print("-" * 60)
-
-    print(contenido[:500])
+        return datos
 
 
-    # ========================================================
-    # INTENTAR INTERPRETAR RESPUESTA COMO JSON
-    # ========================================================
+    except urllib.error.HTTPError as error:
 
-    datos = json.loads(contenido)
+        print(
+            f"HTTP {error.code}: "
+            f"{error.reason}"
+        )
+
+        return None
 
 
-    # ========================================================
-    # GUARDAR RESULTADO
-    # ========================================================
+    except Exception as error:
 
-    archivo_salida = Path("datos_pml.json")
+        print(
+            "Error:",
+            type(error).__name__,
+            error
+        )
 
-    with open(
-        archivo_salida,
-        "w",
-        encoding="utf-8"
-    ) as archivo:
+        return None
 
-        json.dump(
-            datos,
-            archivo,
-            ensure_ascii=False,
-            indent=4
+
+# ============================================================
+# FUNCIÓN PARA VALIDAR SI REALMENTE HAY PML
+# ============================================================
+
+def tiene_datos(datos):
+
+    if not datos:
+        return False
+
+    if datos.get("status") != "OK":
+        return False
+
+    resultados = datos.get("Resultados")
+
+    if not resultados:
+        return False
+
+    primer_nodo = resultados[0]
+
+    valores = primer_nodo.get("Valores")
+
+    if not valores:
+        return False
+
+    return True
+
+
+# ============================================================
+# BUSCAR FECHA MÁS RECIENTE DISPONIBLE
+# ============================================================
+
+print("=" * 70)
+print("SW-PML CENACE")
+print("BÚSQUEDA DEL ÚLTIMO DATO DISPONIBLE")
+print("=" * 70)
+
+print(f"Sistema : {SISTEMA}")
+print(f"Proceso : {PROCESO}")
+print(f"NodoP   : {NODO}")
+
+
+# Empezamos desde hoy.
+# Si todavía no existe información, iremos retrocediendo.
+
+fecha_actual = datetime.now().date()
+
+datos_encontrados = None
+fecha_encontrada = None
+
+
+for dias_atras in range(MAX_DIAS_BUSQUEDA + 1):
+
+    fecha_prueba = (
+        fecha_actual
+        - timedelta(days=dias_atras)
+    )
+
+    datos = consultar_cenace(
+        fecha_prueba
+    )
+
+    if tiene_datos(datos):
+
+        datos_encontrados = datos
+        fecha_encontrada = fecha_prueba
+
+        print()
+        print("DATOS ENCONTRADOS")
+
+        break
+
+    else:
+
+        print(
+            "Sin información válida."
         )
 
 
-    print()
-    print("=" * 60)
-    print("ARCHIVO GENERADO CORRECTAMENTE")
-    print("=" * 60)
+# ============================================================
+# VALIDAR RESULTADO
+# ============================================================
 
-    print(f"Archivo: {archivo_salida}")
+if datos_encontrados is None:
+
+    raise RuntimeError(
+        "No se encontró información PML "
+        f"en los últimos {MAX_DIAS_BUSQUEDA} días."
+    )
 
 
 # ============================================================
-# ERRORES HTTP
+# MOSTRAR RESUMEN
 # ============================================================
 
-except urllib.error.HTTPError as error:
+resultados = datos_encontrados["Resultados"]
 
-    print()
-    print("ERROR HTTP")
+nodo_resultado = resultados[0]
 
-    print(f"Código: {error.code}")
-    print(f"Mensaje: {error.reason}")
+valores = nodo_resultado["Valores"]
 
-    raise
+
+print()
+print("=" * 70)
+print("ÚLTIMO DATO DISPONIBLE")
+print("=" * 70)
+
+print(
+    "Fecha:",
+    fecha_encontrada.strftime("%Y-%m-%d")
+)
+
+print(
+    "NodoP:",
+    nodo_resultado["clv_nodo"]
+)
+
+print(
+    "Registros horarios:",
+    len(valores)
+)
 
 
 # ============================================================
-# OTROS ERRORES
+# GUARDAR ARCHIVO PRINCIPAL
 # ============================================================
 
-except Exception as error:
+archivo_salida = Path(
+    "datos_pml.json"
+)
 
-    print()
-    print("ERROR AL CONSULTAR CENACE")
+with open(
+    archivo_salida,
+    "w",
+    encoding="utf-8"
+) as archivo:
 
-    print(type(error).__name__)
-    print(error)
+    json.dump(
+        datos_encontrados,
+        archivo,
+        ensure_ascii=False,
+        indent=4
+    )
 
-    raise
+
+print()
+print(
+    "Archivo actualizado:",
+    archivo_salida
+)
+
+
+# ============================================================
+# GUARDAR COPIA HISTÓRICA
+# ============================================================
+
+carpeta_historica = Path(
+    "datos",
+    str(fecha_encontrada.year)
+)
+
+carpeta_historica.mkdir(
+    parents=True,
+    exist_ok=True
+)
+
+
+archivo_historico = (
+    carpeta_historica
+    /
+    f"{fecha_encontrada.strftime('%Y-%m-%d')}.json"
+)
+
+
+with open(
+    archivo_historico,
+    "w",
+    encoding="utf-8"
+) as archivo:
+
+    json.dump(
+        datos_encontrados,
+        archivo,
+        ensure_ascii=False,
+        indent=4
+    )
+
+
+print(
+    "Histórico guardado:",
+    archivo_historico
+)
+
+
+# ============================================================
+# CREAR ÍNDICE DE FECHAS DISPONIBLES
+# ============================================================
+
+archivos_historicos = sorted(
+    Path("datos").glob("*/*.json"),
+    reverse=True
+)
+
+
+fechas_disponibles = [
+    archivo.stem
+    for archivo in archivos_historicos
+]
+
+
+indice = {
+
+    "ultima_actualizacion":
+        datetime.now().isoformat(
+            timespec="seconds"
+        ),
+
+    "sistema":
+        SISTEMA,
+
+    "proceso":
+        PROCESO,
+
+    "nodo":
+        NODO,
+
+    "ultima_fecha_disponible":
+        fecha_encontrada.strftime(
+            "%Y-%m-%d"
+        ),
+
+    "fechas_disponibles":
+        fechas_disponibles
+
+}
+
+
+with open(
+    "indice_pml.json",
+    "w",
+    encoding="utf-8"
+) as archivo:
+
+    json.dump(
+        indice,
+        archivo,
+        ensure_ascii=False,
+        indent=4
+    )
+
+
+print(
+    "Índice actualizado: indice_pml.json"
+)
+
+
+print()
+print("=" * 70)
+print("PROCESO TERMINADO CORRECTAMENTE")
+print("=" * 70)

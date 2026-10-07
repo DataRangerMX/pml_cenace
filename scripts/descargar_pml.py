@@ -14,17 +14,21 @@ SISTEMA = "SIN"
 PROCESO = "MDA"
 NODO = "01PLO-115"
 
-# Cuántos días hacia atrás probar si no encontramos información
-MAX_DIAS_BUSQUEDA = 10
+# Cantidad aproximada de días históricos que queremos conservar
+DIAS_HISTORICOS = 30
+
+# El SW-PML permite consultar periodos de hasta 7 días
+DIAS_POR_BLOQUE = 7
 
 
 # ============================================================
-# FUNCIÓN PARA CONSTRUIR LA URL
+# CONSTRUIR URL
 # ============================================================
 
-def construir_url(fecha):
+def construir_url(fecha_inicio, fecha_fin):
 
-    fecha_url = fecha.strftime("%Y/%m/%d")
+    inicio = fecha_inicio.strftime("%Y/%m/%d")
+    fin = fecha_fin.strftime("%Y/%m/%d")
 
     return (
         "https://ws01.cenace.gob.mx:8082/"
@@ -32,24 +36,34 @@ def construir_url(fecha):
         f"{SISTEMA}/"
         f"{PROCESO}/"
         f"{NODO}/"
-        f"{fecha_url}/"
-        f"{fecha_url}/"
+        f"{inicio}/"
+        f"{fin}/"
         "JSON"
     )
 
 
 # ============================================================
-# FUNCIÓN PARA CONSULTAR CENACE
+# CONSULTAR CENACE
 # ============================================================
 
-def consultar_cenace(fecha):
+def consultar_cenace(fecha_inicio, fecha_fin):
 
-    url = construir_url(fecha)
+    url = construir_url(
+        fecha_inicio,
+        fecha_fin
+    )
 
     print()
-    print("=" * 70)
-    print(f"Probando fecha: {fecha.strftime('%Y-%m-%d')}")
-    print(f"URL: {url}")
+    print("=" * 75)
+
+    print(
+        "Consultando:",
+        fecha_inicio.strftime("%Y-%m-%d"),
+        "a",
+        fecha_fin.strftime("%Y-%m-%d")
+    )
+
+    print(url)
 
     request = urllib.request.Request(
         url,
@@ -62,7 +76,7 @@ def consultar_cenace(fecha):
 
         with urllib.request.urlopen(
             request,
-            timeout=30
+            timeout=60
         ) as response:
 
             contenido = (
@@ -72,6 +86,22 @@ def consultar_cenace(fecha):
             )
 
         datos = json.loads(contenido)
+
+        if datos.get("status") != "OK":
+
+            print(
+                "Respuesta sin status OK."
+            )
+
+            return None
+
+        if not datos.get("Resultados"):
+
+            print(
+                "Respuesta sin resultados."
+            )
+
+            return None
 
         return datos
 
@@ -89,7 +119,7 @@ def consultar_cenace(fecha):
     except Exception as error:
 
         print(
-            "Error:",
+            "ERROR:",
             type(error).__name__,
             error
         )
@@ -98,186 +128,308 @@ def consultar_cenace(fecha):
 
 
 # ============================================================
-# FUNCIÓN PARA VALIDAR SI REALMENTE HAY PML
+# CARPETAS
 # ============================================================
 
-def tiene_datos(datos):
+carpeta_datos = Path("datos")
 
-    if not datos:
-        return False
-
-    if datos.get("status") != "OK":
-        return False
-
-    resultados = datos.get("Resultados")
-
-    if not resultados:
-        return False
-
-    primer_nodo = resultados[0]
-
-    valores = primer_nodo.get("Valores")
-
-    if not valores:
-        return False
-
-    return True
-
-
-# ============================================================
-# BUSCAR FECHA MÁS RECIENTE DISPONIBLE
-# ============================================================
-
-print("=" * 70)
-print("SW-PML CENACE")
-print("BÚSQUEDA DEL ÚLTIMO DATO DISPONIBLE")
-print("=" * 70)
-
-print(f"Sistema : {SISTEMA}")
-print(f"Proceso : {PROCESO}")
-print(f"NodoP   : {NODO}")
-
-
-# Empezamos desde hoy.
-# Si todavía no existe información, iremos retrocediendo.
-
-fecha_actual = datetime.now().date()
-
-datos_encontrados = None
-fecha_encontrada = None
-
-
-for dias_atras in range(MAX_DIAS_BUSQUEDA + 1):
-
-    fecha_prueba = (
-        fecha_actual
-        - timedelta(days=dias_atras)
-    )
-
-    datos = consultar_cenace(
-        fecha_prueba
-    )
-
-    if tiene_datos(datos):
-
-        datos_encontrados = datos
-        fecha_encontrada = fecha_prueba
-
-        print()
-        print("DATOS ENCONTRADOS")
-
-        break
-
-    else:
-
-        print(
-            "Sin información válida."
-        )
-
-
-# ============================================================
-# VALIDAR RESULTADO
-# ============================================================
-
-if datos_encontrados is None:
-
-    raise RuntimeError(
-        "No se encontró información PML "
-        f"en los últimos {MAX_DIAS_BUSQUEDA} días."
-    )
-
-
-# ============================================================
-# MOSTRAR RESUMEN
-# ============================================================
-
-resultados = datos_encontrados["Resultados"]
-
-nodo_resultado = resultados[0]
-
-valores = nodo_resultado["Valores"]
-
-
-print()
-print("=" * 70)
-print("ÚLTIMO DATO DISPONIBLE")
-print("=" * 70)
-
-print(
-    "Fecha:",
-    fecha_encontrada.strftime("%Y-%m-%d")
-)
-
-print(
-    "NodoP:",
-    nodo_resultado["clv_nodo"]
-)
-
-print(
-    "Registros horarios:",
-    len(valores)
-)
-
-
-# ============================================================
-# GUARDAR ARCHIVO PRINCIPAL
-# ============================================================
-
-archivo_salida = Path(
-    "datos_pml.json"
-)
-
-with open(
-    archivo_salida,
-    "w",
-    encoding="utf-8"
-) as archivo:
-
-    json.dump(
-        datos_encontrados,
-        archivo,
-        ensure_ascii=False,
-        indent=4
-    )
-
-
-print()
-print(
-    "Archivo actualizado:",
-    archivo_salida
-)
-
-
-# ============================================================
-# GUARDAR COPIA HISTÓRICA
-# ============================================================
-
-carpeta_historica = Path(
-    "datos",
-    str(fecha_encontrada.year)
-)
-
-carpeta_historica.mkdir(
+carpeta_datos.mkdir(
     parents=True,
     exist_ok=True
 )
 
 
-archivo_historico = (
-    carpeta_historica
+# ============================================================
+# PERIODO A DESCARGAR
+# ============================================================
+
+hoy = datetime.now().date()
+
+fecha_inicio_total = (
+    hoy
+    - timedelta(
+        days=DIAS_HISTORICOS - 1
+    )
+)
+
+fecha_fin_total = hoy
+
+
+print("=" * 75)
+print("DESCARGA HISTÓRICA SW-PML CENACE")
+print("=" * 75)
+
+print(f"Sistema : {SISTEMA}")
+print(f"Proceso : {PROCESO}")
+print(f"NodoP   : {NODO}")
+
+print(
+    "Periodo :",
+    fecha_inicio_total,
+    "a",
+    fecha_fin_total
+)
+
+
+# ============================================================
+# GENERAR BLOQUES DE HASTA 7 DÍAS
+# ============================================================
+
+fecha_bloque_inicio = fecha_inicio_total
+
+total_archivos_guardados = 0
+
+
+while fecha_bloque_inicio <= fecha_fin_total:
+
+    fecha_bloque_fin = min(
+        fecha_bloque_inicio
+        + timedelta(
+            days=DIAS_POR_BLOQUE - 1
+        ),
+        fecha_fin_total
+    )
+
+
+    datos = consultar_cenace(
+        fecha_bloque_inicio,
+        fecha_bloque_fin
+    )
+
+
+    if datos:
+
+        resultados = datos.get(
+            "Resultados",
+            []
+        )
+
+
+        # ====================================================
+        # PUEDE HABER UNO O MÁS NODOS
+        # ====================================================
+
+        for resultado in resultados:
+
+            valores = resultado.get(
+                "Valores",
+                []
+            )
+
+
+            # ================================================
+            # AGRUPAR REGISTROS POR FECHA
+            # ================================================
+
+            registros_por_fecha = {}
+
+
+            for registro in valores:
+
+                fecha = registro.get(
+                    "fecha"
+                )
+
+                if not fecha:
+                    continue
+
+
+                if fecha not in registros_por_fecha:
+
+                    registros_por_fecha[
+                        fecha
+                    ] = []
+
+
+                registros_por_fecha[
+                    fecha
+                ].append(
+                    registro
+                )
+
+
+            # ================================================
+            # CREAR UN JSON POR DÍA
+            # ================================================
+
+            for fecha, registros in registros_por_fecha.items():
+
+                anio = fecha[:4]
+
+
+                carpeta_anio = (
+                    carpeta_datos
+                    /
+                    anio
+                )
+
+
+                carpeta_anio.mkdir(
+                    parents=True,
+                    exist_ok=True
+                )
+
+
+                datos_dia = {
+
+                    "nombre":
+                        datos.get("nombre"),
+
+                    "proceso":
+                        datos.get("proceso"),
+
+                    "sistema":
+                        datos.get("sistema"),
+
+                    "area":
+                        datos.get("area"),
+
+                    "Resultados": [
+
+                        {
+
+                            "clv_nodo":
+                                resultado.get(
+                                    "clv_nodo"
+                                ),
+
+                            "Valores":
+                                registros
+
+                        }
+
+                    ],
+
+                    "status":
+                        datos.get("status")
+
+                }
+
+
+                archivo_dia = (
+                    carpeta_anio
+                    /
+                    f"{fecha}.json"
+                )
+
+
+                with open(
+                    archivo_dia,
+                    "w",
+                    encoding="utf-8"
+                ) as archivo:
+
+                    json.dump(
+                        datos_dia,
+                        archivo,
+                        ensure_ascii=False,
+                        indent=4
+                    )
+
+
+                total_archivos_guardados += 1
+
+
+                print(
+                    "Guardado:",
+                    archivo_dia,
+                    f"({len(registros)} registros)"
+                )
+
+
+    fecha_bloque_inicio = (
+        fecha_bloque_fin
+        + timedelta(days=1)
+    )
+
+
+# ============================================================
+# BUSCAR TODOS LOS ARCHIVOS HISTÓRICOS
+# ============================================================
+
+archivos_historicos = sorted(
+    carpeta_datos.glob("*/*.json")
+)
+
+
+if not archivos_historicos:
+
+    raise RuntimeError(
+        "No se pudo obtener ningún "
+        "archivo histórico."
+    )
+
+
+# ============================================================
+# CREAR LISTA DE FECHAS
+# ============================================================
+
+fechas_disponibles = sorted(
+    [
+        archivo.stem
+        for archivo
+        in archivos_historicos
+    ],
+    reverse=True
+)
+
+
+ultima_fecha = fechas_disponibles[0]
+
+
+print()
+print("=" * 75)
+print("RESUMEN")
+print("=" * 75)
+
+print(
+    "Archivos generados en esta ejecución:",
+    total_archivos_guardados
+)
+
+print(
+    "Fechas históricas disponibles:",
+    len(fechas_disponibles)
+)
+
+print(
+    "Última fecha disponible:",
+    ultima_fecha
+)
+
+
+# ============================================================
+# COPIAR ÚLTIMO DÍA A datos_pml.json
+# ============================================================
+
+archivo_ultimo = (
+    carpeta_datos
     /
-    f"{fecha_encontrada.strftime('%Y-%m-%d')}.json"
+    ultima_fecha[:4]
+    /
+    f"{ultima_fecha}.json"
 )
 
 
 with open(
-    archivo_historico,
+    archivo_ultimo,
+    "r",
+    encoding="utf-8"
+) as archivo:
+
+    datos_ultimo = json.load(
+        archivo
+    )
+
+
+with open(
+    "datos_pml.json",
     "w",
     encoding="utf-8"
 ) as archivo:
 
     json.dump(
-        datos_encontrados,
+        datos_ultimo,
         archivo,
         ensure_ascii=False,
         indent=4
@@ -285,26 +437,13 @@ with open(
 
 
 print(
-    "Histórico guardado:",
-    archivo_historico
+    "Actualizado: datos_pml.json"
 )
 
 
 # ============================================================
-# CREAR ÍNDICE DE FECHAS DISPONIBLES
+# CREAR ÍNDICE PARA EL DASHBOARD
 # ============================================================
-
-archivos_historicos = sorted(
-    Path("datos").glob("*/*.json"),
-    reverse=True
-)
-
-
-fechas_disponibles = [
-    archivo.stem
-    for archivo in archivos_historicos
-]
-
 
 indice = {
 
@@ -323,8 +462,11 @@ indice = {
         NODO,
 
     "ultima_fecha_disponible":
-        fecha_encontrada.strftime(
-            "%Y-%m-%d"
+        ultima_fecha,
+
+    "total_fechas":
+        len(
+            fechas_disponibles
         ),
 
     "fechas_disponibles":
@@ -348,11 +490,10 @@ with open(
 
 
 print(
-    "Índice actualizado: indice_pml.json"
+    "Actualizado: indice_pml.json"
 )
 
-
 print()
-print("=" * 70)
+print("=" * 75)
 print("PROCESO TERMINADO CORRECTAMENTE")
-print("=" * 70)
+print("=" * 75)

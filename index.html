@@ -2,149 +2,746 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Prueba SW-PML CENACE</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>PML CENACE | DataRangerMX</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 900px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #f4f6f8;
-            color: #1f2937;
+
+        * {
+            box-sizing: border-box;
         }
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background-color: #07111f;
+
+            color: white;
+
+        }
+
 
         .contenedor {
-            background-color: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+
+            max-width: 1100px;
+
+            margin: auto;
+
+            padding: 50px 25px;
+
         }
+
+
+        .encabezado {
+
+            margin-bottom: 40px;
+
+        }
+
+
+        .etiqueta {
+
+            color: #38bdf8;
+
+            font-size: 12px;
+
+            letter-spacing: 2px;
+
+            font-weight: bold;
+
+        }
+
 
         h1 {
-            color: #0f4c81;
+
+            font-size: 42px;
+
+            margin-bottom: 10px;
+
         }
 
-        button {
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 7px;
-            cursor: pointer;
-            font-weight: bold;
+
+        .descripcion {
+
+            color: #94a3b8;
+
         }
 
-        button:hover {
-            background-color: #0f4c81;
+
+        /* ==============================
+           INDICADORES
+           ============================== */
+
+        .indicadores {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 20px;
+
         }
 
-        #estado {
+
+        .indicador {
+
+            background-color: #0f1e31;
+
+            border: 1px solid #1e293b;
+
+            padding: 22px;
+
+            border-radius: 10px;
+
+        }
+
+
+        .indicador span {
+
+            display: block;
+
+            color: #94a3b8;
+
+            font-size: 11px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .indicador strong {
+
+            font-size: 24px;
+
+            color: #38bdf8;
+
+        }
+
+
+        /* ==============================
+           GRÁFICA
+           ============================== */
+
+        .grafica {
+
+            background-color: #0f1e31;
+
+            border: 1px solid #1e293b;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+        }
+
+
+        .grafica-titulo {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .grafica-titulo span {
+
+            color: #94a3b8;
+
+            font-size: 12px;
+
+        }
+
+
+        .chart-container {
+
+            height: 400px;
+
+        }
+
+
+        /* ==============================
+           FUENTE
+           ============================== */
+
+        .fuente {
+
             margin-top: 25px;
-            font-weight: bold;
+
+            color: #64748b;
+
+            font-size: 12px;
+
         }
 
-        #resultado {
-            margin-top: 20px;
-            background-color: #111827;
-            color: #e5e7eb;
+
+        .estado {
+
+            color: #22c55e;
+
+        }
+
+
+        /* ==============================
+           ERROR
+           ============================== */
+
+        #error {
+
+            display: none;
+
+            background-color: #451a1a;
+
             padding: 20px;
+
             border-radius: 8px;
-            overflow-x: auto;
-            white-space: pre-wrap;
+
+            margin-top: 20px;
+
+            color: #fecaca;
+
         }
-    </style>
-
-</head>
-
-<body>
-
-    <div class="contenedor">
-
-        <h1>⚡ Prueba SW-PML CENACE</h1>
-
-        <p>
-            Esta página intentará consultar directamente
-            el Servicio Web de Precios Marginales Locales de CENACE.
-        </p>
-
-        <p>
-            <strong>Sistema:</strong> SIN<br>
-            <strong>Proceso:</strong> MDA<br>
-            <strong>NodoP:</strong> 01PLO-115<br>
-            <strong>Fecha:</strong> 07/11/2017
-        </p>
-
-        <button onclick="consultarCENACE()">
-            Consultar CENACE
-        </button>
-
-        <div id="estado">
-            Esperando consulta...
-        </div>
-
-        <pre id="resultado"></pre>
-
-    </div>
 
 
-    <script>
+        /* ==============================
+           CELULAR
+           ============================== */
 
-        async function consultarCENACE() {
+        @media(max-width:700px) {
 
-            const estado =
-                document.getElementById("estado");
+            .indicadores {
 
-            const resultado =
-                document.getElementById("resultado");
+                grid-template-columns:
+                    repeat(2,1fr);
 
+            }
 
-            estado.textContent =
-                "Consultando CENACE...";
+            h1 {
 
-            resultado.textContent = "";
-
-
-            const url =
-                "https://ws01.cenace.gob.mx:8082/SWPML/SIM/SIN/MDA/01PLO-115/2017/11/07/2017/11/07/JSON";
-
-
-            try {
-
-                const respuesta =
-                    await fetch(url);
-
-
-                estado.textContent =
-                    "Respuesta recibida. Código HTTP: "
-                    + respuesta.status;
-
-
-                const texto =
-                    await respuesta.text();
-
-
-                resultado.textContent = texto;
-
-
-            } catch (error) {
-
-                estado.textContent =
-                    "La consulta no pudo completarse.";
-
-                resultado.textContent =
-                    "ERROR:\n\n" + error;
-
-                console.error(error);
+                font-size: 32px;
 
             }
 
         }
 
-    </script>
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="contenedor">
+
+
+    <!-- ENCABEZADO -->
+
+    <div class="encabezado">
+
+        <div class="etiqueta">
+            ⚡ DATARANGERMX · ENERGY DATA
+        </div>
+
+        <h1>
+            Precios Marginales Locales
+        </h1>
+
+        <p class="descripcion">
+            Visualización de información obtenida
+            del Servicio Web de PML de CENACE.
+        </p>
+
+    </div>
+
+
+
+    <!-- INDICADORES -->
+
+    <div class="indicadores">
+
+
+        <div class="indicador">
+
+            <span>SISTEMA</span>
+
+            <strong id="sistema">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="indicador">
+
+            <span>PROCESO</span>
+
+            <strong id="proceso">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="indicador">
+
+            <span>NODO P</span>
+
+            <strong id="nodo">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="indicador">
+
+            <span>PML MÁXIMO</span>
+
+            <strong id="pmlMax">
+                ---
+            </strong>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- GRÁFICA -->
+
+    <div class="grafica">
+
+
+        <div class="grafica-titulo">
+
+            <div>
+
+                <strong>
+                    PML POR HORA
+                </strong>
+
+                <span>
+                    $/MWh
+                </span>
+
+            </div>
+
+
+            <div class="estado">
+
+                ● DATOS CENACE
+
+            </div>
+
+        </div>
+
+
+        <div class="chart-container">
+
+            <canvas id="graficaPML"></canvas>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div id="error"></div>
+
+
+
+    <div class="fuente">
+
+        Fuente:
+        Centro Nacional de Control de Energía (CENACE)
+        · SW-PML.
+
+        <br>
+
+        Datos utilizados con fines demostrativos
+        para aprendizaje y visualización.
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* ==========================================================
+   LEER EL ARCHIVO GENERADO POR PYTHON
+   ========================================================== */
+
+
+fetch("datos_pml.json")
+
+.then(respuesta => {
+
+    if (!respuesta.ok) {
+
+        throw new Error(
+            "No se pudo leer datos_pml.json"
+        );
+
+    }
+
+    return respuesta.json();
+
+})
+
+
+.then(datos => {
+
+
+    console.log(
+        "Datos recibidos:",
+        datos
+    );
+
+
+    /* ======================================================
+       DATOS GENERALES
+       ====================================================== */
+
+
+    document.getElementById(
+        "sistema"
+    ).textContent =
+        datos.sistema;
+
+
+    document.getElementById(
+        "proceso"
+    ).textContent =
+        datos.proceso;
+
+
+
+    /* ======================================================
+       LOCALIZAR RESULTADOS
+       ====================================================== */
+
+
+    const nodo =
+        datos.Resultados.Nodo;
+
+
+    document.getElementById(
+        "nodo"
+    ).textContent =
+        nodo.clv_nodo;
+
+
+
+    /* ======================================================
+       CENACE PUEDE DEVOLVER Valor COMO
+       OBJETO O COMO ARREGLO
+       ====================================================== */
+
+
+    let valores =
+        nodo.Valores.Valor;
+
+
+    if (!Array.isArray(valores)) {
+
+        valores = [valores];
+
+    }
+
+
+
+    /* ======================================================
+       EXTRAER HORAS Y PML
+       ====================================================== */
+
+
+    const horas =
+        valores.map(
+            registro =>
+                "H" + registro.hora
+        );
+
+
+    const precios =
+        valores.map(
+            registro =>
+                Number(registro.pml)
+        );
+
+
+
+    /* ======================================================
+       CALCULAR PML MÁXIMO
+       ====================================================== */
+
+
+    const maximo =
+        Math.max(...precios);
+
+
+    document.getElementById(
+        "pmlMax"
+    ).textContent =
+        "$" +
+        maximo.toLocaleString(
+            "es-MX",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+
+
+
+    /* ======================================================
+       CREAR GRÁFICA
+       ====================================================== */
+
+
+    const contexto =
+        document
+        .getElementById(
+            "graficaPML"
+        )
+        .getContext("2d");
+
+
+
+    const gradiente =
+        contexto.createLinearGradient(
+            0,
+            0,
+            0,
+            400
+        );
+
+
+    gradiente.addColorStop(
+        0,
+        "rgba(56,189,248,0.35)"
+    );
+
+
+    gradiente.addColorStop(
+        1,
+        "rgba(56,189,248,0)"
+    );
+
+
+
+    new Chart(
+        contexto,
+        {
+
+            type: "line",
+
+            data: {
+
+                labels: horas,
+
+                datasets: [{
+
+                    label:
+                        "PML ($/MWh)",
+
+                    data:
+                        precios,
+
+                    borderColor:
+                        "#38bdf8",
+
+                    backgroundColor:
+                        gradiente,
+
+                    borderWidth:
+                        3,
+
+                    fill:
+                        true,
+
+                    tension:
+                        0.35,
+
+                    pointRadius:
+                        3,
+
+                    pointHoverRadius:
+                        7
+
+                }]
+
+            },
+
+
+            options: {
+
+                responsive:
+                    true,
+
+                maintainAspectRatio:
+                    false,
+
+                interaction: {
+
+                    intersect:
+                        false,
+
+                    mode:
+                        "index"
+
+                },
+
+
+                plugins: {
+
+                    legend: {
+
+                        display:
+                            false
+
+                    },
+
+
+                    tooltip: {
+
+                        callbacks: {
+
+                            label:
+                            function(context) {
+
+                                return (
+                                    "$" +
+                                    context
+                                    .parsed
+                                    .y
+                                    .toLocaleString(
+                                        "es-MX",
+                                        {
+                                            minimumFractionDigits:2
+                                        }
+                                    )
+                                    +
+                                    " /MWh"
+                                );
+
+                            }
+
+                        }
+
+                    }
+
+                },
+
+
+                scales: {
+
+                    x: {
+
+                        grid: {
+
+                            display:
+                                false
+
+                        },
+
+                        ticks: {
+
+                            color:
+                                "#64748b"
+
+                        }
+
+                    },
+
+
+                    y: {
+
+                        grid: {
+
+                            color:
+                            "rgba(148,163,184,0.08)"
+
+                        },
+
+                        ticks: {
+
+                            color:
+                                "#64748b",
+
+                            callback:
+                            function(valor) {
+
+                                return (
+                                    "$" +
+                                    valor.toLocaleString()
+                                );
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+})
+
+
+.catch(error => {
+
+
+    console.error(error);
+
+
+    const cajaError =
+        document.getElementById(
+            "error"
+        );
+
+
+    cajaError.style.display =
+        "block";
+
+
+    cajaError.textContent =
+        "Error al cargar los datos: "
+        +
+        error.message;
+
+
+});
+
+
+</script>
+
 
 </body>
 

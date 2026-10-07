@@ -4,9 +4,13 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>PML CENACE | DataRangerMX</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Explorador PML CENACE | DataRangerMX
+    </title>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -17,121 +21,468 @@
         }
 
         body {
+
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #07111f;
-            color: white;
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            background-color:
+                #07111f;
+
+            color:
+                white;
+
         }
+
 
         .contenedor {
-            max-width: 1150px;
-            margin: auto;
-            padding: 50px 25px;
+
+            max-width:
+                1150px;
+
+            margin:
+                auto;
+
+            padding:
+                45px 25px;
+
         }
+
 
         .etiqueta {
-            color: #38bdf8;
-            font-size: 12px;
-            letter-spacing: 2px;
-            font-weight: bold;
+
+            color:
+                #38bdf8;
+
+            font-size:
+                12px;
+
+            letter-spacing:
+                2px;
+
+            font-weight:
+                bold;
+
         }
+
 
         h1 {
-            font-size: 42px;
-            margin-bottom: 10px;
+
+            font-size:
+                42px;
+
+            margin-bottom:
+                8px;
+
         }
+
 
         .descripcion {
-            color: #94a3b8;
+
+            color:
+                #94a3b8;
+
         }
+
+
+        /* =================================
+           FILTROS
+           ================================= */
+
+
+        .panel-filtros {
+
+            background-color:
+                #0f1e31;
+
+            border:
+                1px solid #1e293b;
+
+            border-radius:
+                12px;
+
+            padding:
+                22px;
+
+            margin-top:
+                30px;
+
+            margin-bottom:
+                20px;
+
+        }
+
+
+        .titulo-filtros {
+
+            font-size:
+                12px;
+
+            color:
+                #94a3b8;
+
+            margin-bottom:
+                15px;
+
+            letter-spacing:
+                1px;
+
+        }
+
+
+        .filtros {
+
+            display:
+                flex;
+
+            gap:
+                15px;
+
+            align-items:
+                end;
+
+            flex-wrap:
+                wrap;
+
+        }
+
+
+        .grupo-filtro {
+
+            min-width:
+                220px;
+
+        }
+
+
+        .grupo-filtro label {
+
+            display:
+                block;
+
+            color:
+                #94a3b8;
+
+            font-size:
+                11px;
+
+            margin-bottom:
+                7px;
+
+        }
+
+
+        select {
+
+            width:
+                100%;
+
+            background-color:
+                #07111f;
+
+            color:
+                white;
+
+            border:
+                1px solid #334155;
+
+            border-radius:
+                7px;
+
+            padding:
+                11px;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        .ultima {
+
+            background-color:
+                #0f4c81;
+
+            color:
+                white;
+
+            border:
+                none;
+
+            border-radius:
+                7px;
+
+            padding:
+                11px 17px;
+
+            cursor:
+                pointer;
+
+            font-weight:
+                bold;
+
+        }
+
+
+        .ultima:hover {
+
+            background-color:
+                #2563eb;
+
+        }
+
+
+        /* =================================
+           INDICADORES
+           ================================= */
+
 
         .indicadores {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-top: 35px;
-            margin-bottom: 20px;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            gap:
+                15px;
+
+            margin-bottom:
+                20px;
+
         }
+
 
         .indicador {
-            background-color: #0f1e31;
-            border: 1px solid #1e293b;
-            padding: 22px;
-            border-radius: 10px;
+
+            background-color:
+                #0f1e31;
+
+            border:
+                1px solid #1e293b;
+
+            padding:
+                22px;
+
+            border-radius:
+                10px;
+
         }
+
 
         .indicador span {
-            display: block;
-            color: #94a3b8;
-            font-size: 11px;
-            margin-bottom: 10px;
+
+            display:
+                block;
+
+            color:
+                #94a3b8;
+
+            font-size:
+                11px;
+
+            margin-bottom:
+                10px;
+
         }
+
 
         .indicador strong {
-            font-size: 22px;
-            color: #38bdf8;
+
+            font-size:
+                22px;
+
+            color:
+                #38bdf8;
+
         }
+
+
+        /* =================================
+           GRÁFICA
+           ================================= */
+
 
         .grafica {
-            background-color: #0f1e31;
-            border: 1px solid #1e293b;
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 20px;
+
+            background-color:
+                #0f1e31;
+
+            border:
+                1px solid #1e293b;
+
+            border-radius:
+                12px;
+
+            padding:
+                25px;
+
         }
+
 
         .grafica-titulo {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            margin-bottom:
+                20px;
+
         }
+
 
         .subtitulo {
-            color: #94a3b8;
-            font-size: 12px;
+
+            color:
+                #94a3b8;
+
+            font-size:
+                12px;
+
+            margin-top:
+                3px;
+
         }
+
 
         .estado {
-            color: #22c55e;
-            font-size: 12px;
-            font-weight: bold;
+
+            color:
+                #22c55e;
+
+            font-size:
+                12px;
+
+            font-weight:
+                bold;
+
         }
+
 
         .chart-container {
-            height: 430px;
+
+            height:
+                430px;
+
         }
 
-        .fuente {
-            margin-top: 25px;
-            color: #64748b;
-            font-size: 12px;
-            line-height: 1.7;
+
+        /* =================================
+           INFORMACIÓN
+           ================================= */
+
+
+        .informacion {
+
+            margin-top:
+                20px;
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            color:
+                #64748b;
+
+            font-size:
+                11px;
+
+            gap:
+                20px;
+
         }
+
 
         #error {
-            display: none;
-            background-color: #451a1a;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            color: #fecaca;
+
+            display:
+                none;
+
+            background-color:
+                #451a1a;
+
+            color:
+                #fecaca;
+
+            padding:
+                18px;
+
+            border-radius:
+                8px;
+
+            margin-bottom:
+                20px;
+
         }
+
+
+        /* =================================
+           RESPONSIVE
+           ================================= */
+
 
         @media(max-width:700px) {
 
-            .indicadores {
-                grid-template-columns: repeat(2, 1fr);
+            .contenedor {
+                padding:
+                    25px 15px;
             }
 
             h1 {
-                font-size: 32px;
+                font-size:
+                    30px;
+            }
+
+            .indicadores {
+
+                grid-template-columns:
+                    repeat(2,1fr);
+
+            }
+
+            .grupo-filtro {
+
+                width:
+                    100%;
+
+            }
+
+            .ultima {
+
+                width:
+                    100%;
+
             }
 
             .grafica-titulo {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
+
+                flex-direction:
+                    column;
+
+                align-items:
+                    flex-start;
+
+                gap:
+                    10px;
+
+            }
+
+            .informacion {
+
+                flex-direction:
+                    column;
+
             }
 
         }
@@ -140,78 +491,193 @@
 
 </head>
 
+
 <body>
 
+
 <div class="contenedor">
+
 
     <div class="etiqueta">
         ⚡ DATARANGERMX · ENERGY DATA
     </div>
 
+
     <h1>
-        Precios Marginales Locales
+        Explorador de PML
     </h1>
 
+
     <p class="descripcion">
-        Visualización de información obtenida del
-        Servicio Web de Precios Marginales Locales de CENACE.
+
+        Consulta histórica de Precios
+        Marginales Locales obtenidos
+        del SW-PML de CENACE.
+
     </p>
 
 
-    <!-- INDICADORES -->
 
-    <div class="indicadores">
+    <!-- =============================
+         FILTROS
+         ============================= -->
 
-        <div class="indicador">
-            <span>SISTEMA</span>
-            <strong id="sistema">---</strong>
+
+    <div class="panel-filtros">
+
+
+        <div class="titulo-filtros">
+            CONSULTA
         </div>
 
-        <div class="indicador">
-            <span>PROCESO</span>
-            <strong id="proceso">---</strong>
-        </div>
 
-        <div class="indicador">
-            <span>NODO P</span>
-            <strong id="nodo">---</strong>
-        </div>
+        <div class="filtros">
 
-        <div class="indicador">
-            <span>FECHA</span>
-            <strong id="fecha">---</strong>
-        </div>
 
-        <div class="indicador">
-            <span>PML MÁXIMO</span>
-            <strong id="pmlMax">---</strong>
-        </div>
+            <div class="grupo-filtro">
 
-        <div class="indicador">
-            <span>HORA PML MÁXIMO</span>
-            <strong id="horaMax">---</strong>
-        </div>
+                <label>
+                    FECHA DE OPERACIÓN
+                </label>
 
-        <div class="indicador">
-            <span>PML MÍNIMO</span>
-            <strong id="pmlMin">---</strong>
-        </div>
+                <select id="selectorFecha">
+                </select>
 
-        <div class="indicador">
-            <span>PML PROMEDIO</span>
-            <strong id="pmlPromedio">---</strong>
+            </div>
+
+
+            <button
+                class="ultima"
+                onclick="cargarUltimaFecha()">
+
+                Última disponible
+
+            </button>
+
+
         </div>
 
     </div>
 
 
-    <!-- GRÁFICA -->
+
+    <div id="error"></div>
+
+
+
+    <!-- =============================
+         INDICADORES
+         ============================= -->
+
+
+    <div class="indicadores">
+
+
+        <div class="indicador">
+
+            <span>SISTEMA</span>
+
+            <strong id="sistema">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="indicador">
+
+            <span>PROCESO</span>
+
+            <strong id="proceso">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="indicador">
+
+            <span>NODO P</span>
+
+            <strong id="nodo">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="indicador">
+
+            <span>FECHA</span>
+
+            <strong id="fecha">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="indicador">
+
+            <span>PML MÁXIMO</span>
+
+            <strong id="pmlMax">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="indicador">
+
+            <span>HORA PML MÁXIMO</span>
+
+            <strong id="horaMax">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="indicador">
+
+            <span>PML MÍNIMO</span>
+
+            <strong id="pmlMin">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="indicador">
+
+            <span>PML PROMEDIO</span>
+
+            <strong id="pmlPromedio">
+                ---
+            </strong>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =============================
+         GRÁFICA
+         ============================= -->
+
 
     <div class="grafica">
 
+
         <div class="grafica-titulo">
 
+
             <div>
+
                 <strong>
                     COMPONENTES DEL PML POR HORA
                 </strong>
@@ -219,331 +685,756 @@
                 <div class="subtitulo">
                     Valores expresados en $/MWh
                 </div>
+
             </div>
+
 
             <div class="estado">
                 ● DATOS CENACE
             </div>
 
+
         </div>
+
 
         <div class="chart-container">
-            <canvas id="graficaPML"></canvas>
+
+            <canvas id="graficaPML">
+            </canvas>
+
         </div>
 
-    </div>
-
-
-    <div id="error"></div>
-
-
-    <div class="fuente">
-
-        Fuente:
-        Centro Nacional de Control de Energía (CENACE)
-        · Servicio Web de Precios Marginales Locales (SW-PML).
-
-        <br>
-
-        Visualización desarrollada por DataRangerMX
-        con fines de análisis y aprendizaje.
 
     </div>
+
+
+
+    <div class="informacion">
+
+
+        <div>
+
+            Fuente:
+            Centro Nacional de Control de Energía
+            (CENACE) · SW-PML.
+
+        </div>
+
+
+        <div id="ultimaActualizacion">
+
+            Actualización:
+            ---
+
+        </div>
+
+
+    </div>
+
 
 </div>
 
 
+
 <script>
 
-fetch("datos_pml.json")
 
-.then(respuesta => {
+/* ==========================================================
+   VARIABLES GLOBALES
+   ========================================================== */
 
-    if (!respuesta.ok) {
-        throw new Error(
-            "No se pudo leer datos_pml.json"
+
+let indicePML = null;
+
+let grafica = null;
+
+
+
+/* ==========================================================
+   FORMATO MONEDA
+   ========================================================== */
+
+
+function moneda(valor) {
+
+    return "$" +
+        valor.toLocaleString(
+            "es-MX",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
         );
+
+}
+
+
+
+/* ==========================================================
+   MOSTRAR ERROR
+   ========================================================== */
+
+
+function mostrarError(mensaje) {
+
+    const caja =
+        document.getElementById(
+            "error"
+        );
+
+    caja.style.display =
+        "block";
+
+    caja.textContent =
+        mensaje;
+
+}
+
+
+
+/* ==========================================================
+   OCULTAR ERROR
+   ========================================================== */
+
+
+function ocultarError() {
+
+    document.getElementById(
+        "error"
+    ).style.display =
+        "none";
+
+}
+
+
+
+/* ==========================================================
+   CARGAR ÍNDICE
+   ========================================================== */
+
+
+async function cargarIndice() {
+
+    try {
+
+        const respuesta =
+            await fetch(
+                "indice_pml.json"
+                + "?t="
+                + Date.now()
+            );
+
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No se pudo cargar indice_pml.json"
+            );
+
+        }
+
+
+        indicePML =
+            await respuesta.json();
+
+
+        const selector =
+            document.getElementById(
+                "selectorFecha"
+            );
+
+
+        selector.innerHTML =
+            "";
+
+
+        indicePML
+        .fechas_disponibles
+        .forEach(fecha => {
+
+
+            const opcion =
+                document.createElement(
+                    "option"
+                );
+
+
+            opcion.value =
+                fecha;
+
+
+            opcion.textContent =
+                formatearFecha(
+                    fecha
+                );
+
+
+            selector.appendChild(
+                opcion
+            );
+
+
+        });
+
+
+        selector.value =
+            indicePML
+            .ultima_fecha_disponible;
+
+
+        document.getElementById(
+            "ultimaActualizacion"
+        ).textContent =
+
+            "Última actualización: "
+            +
+            indicePML
+            .ultima_actualizacion;
+
+
+        await cargarFecha(
+            indicePML
+            .ultima_fecha_disponible
+        );
+
+
     }
 
-    return respuesta.json();
+    catch(error) {
 
-})
+        console.error(error);
 
-.then(datos => {
+        mostrarError(
+            "Error al cargar el índice: "
+            + error.message
+        );
 
-    console.log(
-        "JSON completo:",
-        datos
+    }
+
+}
+
+
+
+/* ==========================================================
+   FORMATEAR FECHA
+   ========================================================== */
+
+
+function formatearFecha(fecha) {
+
+    const partes =
+        fecha.split("-");
+
+
+    return (
+        partes[2]
+        + "/"
+        + partes[1]
+        + "/"
+        + partes[0]
     );
 
+}
 
-    /* =========================================
+
+
+/* ==========================================================
+   CARGAR FECHA SELECCIONADA
+   ========================================================== */
+
+
+async function cargarFecha(fecha) {
+
+    ocultarError();
+
+
+    try {
+
+        const anio =
+            fecha.substring(
+                0,
+                4
+            );
+
+
+        const ruta =
+            "datos/"
+            + anio
+            + "/"
+            + fecha
+            + ".json";
+
+
+        console.log(
+            "Cargando:",
+            ruta
+        );
+
+
+        const respuesta =
+            await fetch(
+                ruta
+                + "?t="
+                + Date.now()
+            );
+
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No existe información para "
+                + fecha
+            );
+
+        }
+
+
+        const datos =
+            await respuesta.json();
+
+
+        actualizarDashboard(
+            datos
+        );
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        mostrarError(
+            "No se pudieron cargar los datos: "
+            + error.message
+        );
+
+    }
+
+}
+
+
+
+/* ==========================================================
+   ACTUALIZAR DASHBOARD
+   ========================================================== */
+
+
+function actualizarDashboard(datos) {
+
+
+    const nodo =
+        datos.Resultados[0];
+
+
+    const valores =
+        nodo.Valores;
+
+
+    if (!valores.length) {
+
+        mostrarError(
+            "La fecha seleccionada no contiene registros."
+        );
+
+        return;
+
+    }
+
+
+    /* ================================
        INFORMACIÓN GENERAL
-       ========================================= */
-
-    document.getElementById("sistema")
-        .textContent = datos.sistema;
-
-    document.getElementById("proceso")
-        .textContent = datos.proceso;
+       ================================ */
 
 
-    /* =========================================
-       RESULTADO DEL NODO
-       ========================================= */
-
-    const nodo = datos.Resultados[0];
-
-    document.getElementById("nodo")
-        .textContent = nodo.clv_nodo;
+    document.getElementById(
+        "sistema"
+    ).textContent =
+        datos.sistema;
 
 
-    /* =========================================
-       REGISTROS HORARIOS
-       ========================================= */
-
-    const valores = nodo.Valores;
-
-    console.log(
-        "Valores horarios:",
-        valores
-    );
+    document.getElementById(
+        "proceso"
+    ).textContent =
+        datos.proceso;
 
 
-    /* =========================================
-       FECHA
-       ========================================= */
-
-    const fecha = valores[0].fecha;
-
-    document.getElementById("fecha")
-        .textContent = fecha;
+    document.getElementById(
+        "nodo"
+    ).textContent =
+        nodo.clv_nodo;
 
 
-    /* =========================================
-       CONVERTIR DATOS
-       ========================================= */
-
-    const horas = valores.map(
-        registro => "H" + registro.hora
-    );
+    document.getElementById(
+        "fecha"
+    ).textContent =
+        valores[0].fecha;
 
 
-    const pml = valores.map(
-        registro => Number(registro.pml)
-    );
+
+    /* ================================
+       SERIES
+       ================================ */
 
 
-    const energia = valores.map(
-        registro => Number(registro.pml_ene)
-    );
+    const horas =
+        valores.map(
+            registro =>
+                "H"
+                + registro.hora
+        );
 
 
-    const perdidas = valores.map(
-        registro => Number(registro.pml_per)
-    );
+    const pml =
+        valores.map(
+            registro =>
+                Number(
+                    registro.pml
+                )
+        );
 
 
-    const congestion = valores.map(
-        registro => Number(registro.pml_cng)
-    );
+    const energia =
+        valores.map(
+            registro =>
+                Number(
+                    registro.pml_ene
+                )
+        );
 
 
-    /* =========================================
+    const perdidas =
+        valores.map(
+            registro =>
+                Number(
+                    registro.pml_per
+                )
+        );
+
+
+    const congestion =
+        valores.map(
+            registro =>
+                Number(
+                    registro.pml_cng
+                )
+        );
+
+
+
+    /* ================================
        ESTADÍSTICAS
-       ========================================= */
+       ================================ */
 
-    const maximo = Math.max(...pml);
 
-    const minimo = Math.min(...pml);
+    const maximo =
+        Math.max(...pml);
+
+
+    const minimo =
+        Math.min(...pml);
+
 
     const promedio =
         pml.reduce(
-            (suma, valor) => suma + valor,
+            (suma, valor) =>
+                suma + valor,
             0
-        ) / pml.length;
+        )
+        /
+        pml.length;
 
 
     const posicionMax =
-        pml.indexOf(maximo);
+        pml.indexOf(
+            maximo
+        );
 
 
     const horaMax =
-        horas[posicionMax];
+        horas[
+            posicionMax
+        ];
 
 
-    /* =========================================
-       FORMATO MONEDA
-       ========================================= */
 
-    function moneda(valor) {
+    document.getElementById(
+        "pmlMax"
+    ).textContent =
+        moneda(maximo);
 
-        return "$" +
-            valor.toLocaleString(
-                "es-MX",
-                {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }
-            );
+
+    document.getElementById(
+        "pmlMin"
+    ).textContent =
+        moneda(minimo);
+
+
+    document.getElementById(
+        "pmlPromedio"
+    ).textContent =
+        moneda(promedio);
+
+
+    document.getElementById(
+        "horaMax"
+    ).textContent =
+        horaMax;
+
+
+
+    /* ================================
+       DESTRUIR GRÁFICA ANTERIOR
+       ================================ */
+
+
+    if (grafica) {
+
+        grafica.destroy();
 
     }
 
 
-    document.getElementById("pmlMax")
-        .textContent = moneda(maximo);
 
-    document.getElementById("horaMax")
-        .textContent = horaMax;
+    /* ================================
+       CREAR NUEVA GRÁFICA
+       ================================ */
 
-    document.getElementById("pmlMin")
-        .textContent = moneda(minimo);
-
-    document.getElementById("pmlPromedio")
-        .textContent = moneda(promedio);
-
-
-    /* =========================================
-       CREAR GRÁFICA
-       ========================================= */
 
     const contexto =
         document
-        .getElementById("graficaPML")
+        .getElementById(
+            "graficaPML"
+        )
         .getContext("2d");
 
 
-    new Chart(contexto, {
+    grafica =
+        new Chart(
+            contexto,
+            {
 
-        type: "line",
-
-        data: {
-
-            labels: horas,
-
-            datasets: [
-
-                {
-                    label: "PML",
-                    data: pml,
-                    borderColor: "#38bdf8",
-                    backgroundColor:
-                        "rgba(56,189,248,0.08)",
-                    borderWidth: 3,
-                    pointRadius: 3,
-                    pointHoverRadius: 7,
-                    tension: 0.25
-                },
-
-                {
-                    label: "Energía",
-                    data: energia,
-                    borderColor: "#22c55e",
-                    borderWidth: 2,
-                    pointRadius: 2,
-                    tension: 0.25
-                },
-
-                {
-                    label: "Pérdidas",
-                    data: perdidas,
-                    borderColor: "#f59e0b",
-                    borderWidth: 2,
-                    pointRadius: 2,
-                    tension: 0.25
-                },
-
-                {
-                    label: "Congestión",
-                    data: congestion,
-                    borderColor: "#f43f5e",
-                    borderWidth: 2,
-                    pointRadius: 2,
-                    tension: 0.25
-                }
-
-            ]
-
-        },
+                type:
+                    "line",
 
 
-        options: {
+                data: {
 
-            responsive: true,
-
-            maintainAspectRatio: false,
-
-            interaction: {
-                mode: "index",
-                intersect: false
-            },
+                    labels:
+                        horas,
 
 
-            plugins: {
+                    datasets: [
 
-                legend: {
+                        {
 
-                    labels: {
-                        color: "#cbd5e1"
-                    }
+                            label:
+                                "PML",
 
-                },
+                            data:
+                                pml,
 
+                            borderColor:
+                                "#38bdf8",
 
-                tooltip: {
+                            borderWidth:
+                                3,
 
-                    callbacks: {
+                            pointRadius:
+                                3,
 
-                        label: function(context) {
+                            tension:
+                                0.25
 
-                            return (
-                                context.dataset.label +
-                                ": " +
-                                moneda(context.parsed.y) +
-                                "/MWh"
-                            );
+                        },
+
+                        {
+
+                            label:
+                                "Energía",
+
+                            data:
+                                energia,
+
+                            borderColor:
+                                "#22c55e",
+
+                            borderWidth:
+                                2,
+
+                            pointRadius:
+                                2,
+
+                            tension:
+                                0.25
+
+                        },
+
+                        {
+
+                            label:
+                                "Pérdidas",
+
+                            data:
+                                perdidas,
+
+                            borderColor:
+                                "#f59e0b",
+
+                            borderWidth:
+                                2,
+
+                            pointRadius:
+                                2,
+
+                            tension:
+                                0.25
+
+                        },
+
+                        {
+
+                            label:
+                                "Congestión",
+
+                            data:
+                                congestion,
+
+                            borderColor:
+                                "#f43f5e",
+
+                            borderWidth:
+                                2,
+
+                            pointRadius:
+                                2,
+
+                            tension:
+                                0.25
 
                         }
 
-                    }
-
-                }
-
-            },
-
-
-            scales: {
-
-                x: {
-
-                    grid: {
-                        display: false
-                    },
-
-                    ticks: {
-                        color: "#64748b"
-                    }
+                    ]
 
                 },
 
 
-                y: {
+                options: {
 
-                    grid: {
-                        color:
-                        "rgba(148,163,184,0.08)"
+                    responsive:
+                        true,
+
+                    maintainAspectRatio:
+                        false,
+
+
+                    interaction: {
+
+                        mode:
+                            "index",
+
+                        intersect:
+                            false
+
                     },
 
-                    ticks: {
 
-                        color: "#64748b",
+                    plugins: {
 
-                        callback: function(valor) {
+                        legend: {
 
-                            return "$" +
-                                valor.toLocaleString(
-                                    "es-MX"
-                                );
+                            labels: {
+
+                                color:
+                                    "#cbd5e1"
+
+                            }
+
+                        },
+
+
+                        tooltip: {
+
+                            callbacks: {
+
+                                label:
+                                function(context) {
+
+                                    return (
+                                        context
+                                        .dataset
+                                        .label
+                                        +
+                                        ": "
+                                        +
+                                        moneda(
+                                            context
+                                            .parsed
+                                            .y
+                                        )
+                                        +
+                                        "/MWh"
+                                    );
+
+                                }
+
+                            }
+
+                        }
+
+                    },
+
+
+                    scales: {
+
+                        x: {
+
+                            grid: {
+
+                                display:
+                                    false
+
+                            },
+
+                            ticks: {
+
+                                color:
+                                    "#64748b"
+
+                            }
+
+                        },
+
+
+                        y: {
+
+                            grid: {
+
+                                color:
+                                "rgba(148,163,184,0.08)"
+
+                            },
+
+                            ticks: {
+
+                                color:
+                                    "#64748b",
+
+                                callback:
+                                function(valor) {
+
+                                    return (
+                                        "$"
+                                        +
+                                        valor
+                                        .toLocaleString(
+                                            "es-MX"
+                                        )
+                                    );
+
+                                }
+
+                            }
 
                         }
 
@@ -552,29 +1443,75 @@ fetch("datos_pml.json")
                 }
 
             }
+        );
 
-        }
+}
 
-    });
 
-})
 
-.catch(error => {
+/* ==========================================================
+   EVENTO SELECTOR
+   ========================================================== */
 
-    console.error(error);
 
-    const cajaError =
-        document.getElementById("error");
+document
+.getElementById(
+    "selectorFecha"
+)
+.addEventListener(
+    "change",
+    function() {
 
-    cajaError.style.display = "block";
+        cargarFecha(
+            this.value
+        );
 
-    cajaError.textContent =
-        "Error al cargar los datos: "
-        + error.message;
+    }
+);
 
-});
+
+
+/* ==========================================================
+   BOTÓN ÚLTIMA FECHA
+   ========================================================== */
+
+
+function cargarUltimaFecha() {
+
+    if (!indicePML) {
+        return;
+    }
+
+
+    const fecha =
+        indicePML
+        .ultima_fecha_disponible;
+
+
+    document.getElementById(
+        "selectorFecha"
+    ).value =
+        fecha;
+
+
+    cargarFecha(
+        fecha
+    );
+
+}
+
+
+
+/* ==========================================================
+   INICIAR
+   ========================================================== */
+
+
+cargarIndice();
+
 
 </script>
+
 
 </body>
 

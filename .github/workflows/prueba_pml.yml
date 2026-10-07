@@ -1,14 +1,14 @@
-name: Prueba SW-PML CENACE
+name: Diagnóstico Catálogo NodoP
 
 on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
 
-  consultar-pml:
+  diagnostico-catalogo:
 
     runs-on: ubuntu-latest
 
@@ -24,20 +24,12 @@ jobs:
           python-version: "3.12"
 
 
-      - name: Ejecutar consulta SW-PML
-        run: python scripts/descargar_pml.py
-
-
-      - name: Guardar datos obtenidos
+      - name: Instalar dependencias
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python -m pip install --upgrade pip
+          pip install pandas openpyxl
 
-          git add datos_pml.json indice_pml.json datos/
 
-          if git diff --cached --quiet; then
-            echo "No hay cambios en los datos."
-          else
-            git commit -m "Actualizar datos PML"
-            git push
-          fi
+      - name: Ejecutar diagnóstico del catálogo
+        run: |
+          python scripts/diagnostico_catalogo.py

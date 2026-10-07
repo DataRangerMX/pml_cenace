@@ -197,19 +197,14 @@ catalogo["CLAVE"] = (
 )
 
 
-catalogo = (
-    catalogo[
-        catalogo["SISTEMA"]
-        .isin(SISTEMAS)
-    ]
-    .drop_duplicates(
-        subset=[
-            "SISTEMA",
-            "CLAVE"
-        ]
-    )
-    .copy()
-)
+catalogo = catalogo[catalogo["SISTEMA"].isin(SISTEMAS)].copy()
+catalogo = catalogo.dropna(subset=["SISTEMA", "CLAVE"])
+catalogo = catalogo[catalogo["CLAVE"].ne("nan") & catalogo["CLAVE"].ne("")]
+duplicados = catalogo.duplicated(["SISTEMA", "CLAVE"], keep=False)
+if duplicados.any():
+    muestra = catalogo.loc[duplicados, ["SISTEMA", "CLAVE"]].head(15)
+    raise ValueError("Duplicados en catálogo SISTEMA + CLAVE:\n" + muestra.to_string(index=False))
+
 
 
 print(
@@ -759,9 +754,26 @@ final = pml.merge(
         "SISTEMA",
         "CLAVE"
     ],
-    how="left"
+    how="left",
+    validate="many_to_one",
+    indicator=True
 )
 
+sin_cruce = final["_merge"].ne("both")
+if sin_cruce.any():
+    muestra = final.loc[sin_cruce, ["Sistema", "NodoP"]].drop_duplicates().head(20)
+    raise ValueError("PML sin cruce de catálogo:\n" + muestra.to_string(index=False))
+final = final.drop(columns=["_merge"])
+if len(final) != len(pml):
+    raise AssertionError("El cruce modificó el número de observaciones")
+if final.duplicated(["Fecha", "Proceso", "Sistema", "NodoP", "Hora"]).any():
+    raise ValueError("Existen observaciones PML duplicadas por fecha/proceso/sistema/nodo/hora")
+
+print("\nVALIDACIÓN DIMENSIONAL - CENTRO DE CONTROL REGIONAL")
+for sistema in SISTEMAS:
+    dimension = catalogo.loc[catalogo["SISTEMA"].eq(sistema), "CENTRO DE CONTROL REGIONAL"]
+    print(f"{sistema}: {len(dimension)} NodoP | Gerencias: {dimension.fillna('(VACÍO)').value_counts().to_dict()}")
+print(f"Cruce completo: {len(final):,} observaciones; sin catálogo: 0; duplicados: 0")
 
 # ============================================================
 # DISTRIBUCIÓN PML
@@ -846,8 +858,7 @@ metadata = {
 
     "nodos_catalogo":
         int(
-            catalogo["CLAVE"]
-            .nunique()
+            len(catalogo)
         ),
 
     "observaciones":
@@ -1229,7 +1240,7 @@ for proceso in PROCESOS:
                 "gerencia":
                     limpiar_texto(
                         fila.get(
-                            "GERENCIA REGIONAL DE TRANSMISIÓN"
+                            "CENTRO DE CONTROL REGIONAL"
                         )
                     ),
 
@@ -1283,7 +1294,7 @@ guardar_json(
 salida_gerencias = []
 
 col_gerencia = (
-    "GERENCIA REGIONAL DE TRANSMISIÓN"
+    "CENTRO DE CONTROL REGIONAL"
 )
 
 
@@ -1537,7 +1548,7 @@ for _, fila in (
         "gerencia":
             limpiar_texto(
                 fila.get(
-                    "GERENCIA REGIONAL DE TRANSMISIÓN"
+                    "CENTRO DE CONTROL REGIONAL"
                 )
             ),
 
@@ -1583,6 +1594,29 @@ guardar_json(
     "catalogo_nodos.json",
     catalogo_salida
 )
+
+
+# ============================================================
+# JSON 9 - OBSERVACIONES PARA FILTROS CRUZADOS
+# ============================================================
+# Formato columnar: se evitan repetir nombres de campos 125,280 veces.
+# Las dimensiones se consultan en catalogo_nodos.json mediante Sistema+NodoP.
+# Las fechas MDA/MTR pueden ser distintas: metadata.json las documenta.
+columnas = ["Proceso", "Sistema", "NodoP", "Hora", "PML", "Energia", "Perdidas", "Congestion"]
+registros = []
+for proceso, sistema, nodo, hora, pml_val, ene, per, cng in final[columnas].itertuples(index=False, name=None):
+    registros.append([
+        proceso, sistema, nodo, int(hora),
+        round(float(pml_val), 4), round(float(ene), 4),
+        round(float(per), 4), round(float(cng), 4)
+    ])
+
+guardar_json("datos_dashboard.json", {
+    "version": 1,
+    "columnas": ["proceso", "sistema", "nodo", "hora", "pml", "energia", "perdidas", "congestion"],
+    "registros": registros
+})
+print("NOTA: index.html actual aún no utiliza datos_dashboard.json; requiere actualización posterior.")
 
 
 # ============================================================

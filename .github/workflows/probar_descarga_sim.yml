@@ -1,0 +1,35 @@
+name: Probar descarga SIM CENACE
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probar-descarga:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: python -m pip install requests beautifulsoup4
+
+      - name: Probar descarga del SIM
+        run: python scripts/probar_descarga_sim.py
+
+      - name: Guardar archivos de diagnóstico
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prueba-descarga-sim
+          path: prueba_sim/
+          if-no-files-found: warn
+          retention-days: 7

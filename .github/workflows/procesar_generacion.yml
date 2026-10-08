@@ -1,0 +1,30 @@
+name: Procesar generación SIM CENACE
+
+on:
+  workflow_dispatch:
+  # Sin cron todavía: primero validar descarga de ambos meses.
+
+permissions:
+  contents: read
+
+jobs:
+  procesar-generacion:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener repositorio
+        uses: actions/checkout@v4
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Instalar dependencias
+        run: pip install requests beautifulsoup4
+      - name: Descargar y validar julio y agosto 2026
+        run: python scripts/procesar_generacion.py --meses 2026-07 2026-08
+      - name: Guardar resultados para revisión
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generacion-sim-validacion
+          path: generacion_data/
+          if-no-files-found: warn

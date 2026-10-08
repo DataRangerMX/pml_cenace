@@ -1,0 +1,508 @@
+{
+  "fuente": "CENACE SIM (Área Pública)",
+  "url": "https://www.cenace.gob.mx/Paginas/SIM/Reportes/EnergiaGeneradaTipoTec.aspx",
+  "sistema": "SEN",
+  "liquidacion": "L0",
+  "periodos": [
+    {
+      "periodo": "2022-01",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 24839860.3944,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN enero 2022 v2022 02 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2022-01.json",
+      "sha256_csv": "e67dbbc896ea4568e4d263c5d98d106cc8c50703dc75c024c523000e54288d26"
+    },
+    {
+      "periodo": "2022-02",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 672,
+      "total_mwh": 23095857.0048,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN febrero 2022 v2022 03 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2022-02.json",
+      "sha256_csv": "a163c763ac3ab889f07201d37bcd1edb207dc618b7fcbc444b22ee56b17f2934"
+    },
+    {
+      "periodo": "2022-03",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 26560056.3398,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN marzo 2022 v2022 04 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2022-03.json",
+      "sha256_csv": "49b7fa8f90a8f566f5a81cea349c7a675928c3d7048be3edbc907855569d25a3"
+    },
+    {
+      "periodo": "2022-04",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 720,
+      "total_mwh": 27516134.1471,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN abril 2022 v2022 05 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2022-04.json",
+      "sha256_csv": "64536d981c93f00bfa7719429eab6dd532ff56203f522fe6f8fa61c01d216c67"
+    },
+    {
+      "periodo": "2022-05",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 31101711.4199,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN mayo 2022 v2022 06 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2022-05.json",
+      "sha256_csv": "b63f424840173a0eed821503bc85f92df8f1ddec4c5142f8e22783c965365915"
+    },
+    {
+      "periodo": "2022-06",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 720,
+      "total_mwh": 30756795.0676,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN junio 2022 v2022 07 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2022-06.json",
+      "sha256_csv": "ebb0881292b725a8dbf8fcfbcd260b2a6d9161a4da14a647bdb77f5ecf0ce4e9"
+    },
+    {
+      "periodo": "2022-07",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 32135479.921,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN julio 2022 v2022 08 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2022-07.json",
+      "sha256_csv": "31e63d0225f8425d36a804437d1a2007d5271f057a6468c8face0179f36db28d"
+    },
+    {
+      "periodo": "2022-08",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 31224872.0595,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN agosto 2022 v2022 09 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2022-08.json",
+      "sha256_csv": "35810a683347e2bee975fbbc0aed9867e267002e714f004b5a071a52cd231e84"
+    },
+    {
+      "periodo": "2022-09",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 720,
+      "total_mwh": 28503875.9176,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN septiembre 2022 v2022 10 14_05 00 05.csv",
+      "archivo_json": "generacion_L0_SEN_2022-09.json",
+      "sha256_csv": "0cfa96a281fc1765d8f69b8d07918344de2d6bd89563a133286876e40b166269"
+    },
+    {
+      "periodo": "2022-12",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 24997260.3074,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN diciembre 2022 v2023 01 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2022-12.json",
+      "sha256_csv": "3267052e7b35b7ac9b36a66cce50d1b8b2a0b2b2a599759982023eee7e39dd3c"
+    },
+    {
+      "periodo": "2023-01",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 25537391.8798,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN enero 2023 v2023 02 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2023-01.json",
+      "sha256_csv": "3f93715543ff2ebffb8ce4e31b2eff8eac32f8a5e34d22dedbb930d68e6739dc"
+    },
+    {
+      "periodo": "2023-02",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 672,
+      "total_mwh": 23824357.8697,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN febrero 2023 v2023 03 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2023-02.json",
+      "sha256_csv": "8bc200907462d807a4400d52556f67485120d064561b1857a62baabc58723266"
+    },
+    {
+      "periodo": "2023-03",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 27795617.9642,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN marzo 2023 v2023 04 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2023-03.json",
+      "sha256_csv": "6e81cb1923f934cb6ecf39840bc6cc0f26a425ab4a9e28f8e74680c5d3ccc964"
+    },
+    {
+      "periodo": "2023-05",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 30426361.3431,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN mayo 2023 v2023 06 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2023-05.json",
+      "sha256_csv": "27ff8558b67804560ca6cc68e4861de708e18995d65f4207df771293bdd37e23"
+    },
+    {
+      "periodo": "2023-06",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 720,
+      "total_mwh": 32826527.2849,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN junio 2023 v2023 07 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2023-06.json",
+      "sha256_csv": "fd880aeb6aecba52c718fbb906ede61b0e1598a02010312e0742cb4c41fba86f"
+    },
+    {
+      "periodo": "2023-07",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 33764269.9182,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN julio 2023 v2023 08 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2023-07.json",
+      "sha256_csv": "a9aa0a8fc0ad25ed595aceb0120a636c60c5d97dc81c4af25a5f7bc47173e602"
+    },
+    {
+      "periodo": "2023-08",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 33566438.5025,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN agosto 2023 v2023 09 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2023-08.json",
+      "sha256_csv": "b2ac5ffb1bcaf94aede440cfe1a99ec3e620f29daa17004e32a866a5f1a007a6"
+    },
+    {
+      "periodo": "2023-09",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 720,
+      "total_mwh": 31814111.6629,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN septiembre 2023 v2023 10 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2023-09.json",
+      "sha256_csv": "027dac0f332642db5b531823b71b89a0db1ea09be14c4e2cf529ac4c574369a0"
+    },
+    {
+      "periodo": "2023-10",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 29218194.1238,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN octubre 2023 v2023 11 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2023-10.json",
+      "sha256_csv": "6ab57b0e1e801233da9d2cbaae244054de6ebe6616238be2d263c117740ddb47"
+    },
+    {
+      "periodo": "2023-12",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 24637332.6787,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN diciembre 2023 v2024 01 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2023-12.json",
+      "sha256_csv": "597004f460b80813d1de106f5f57fd68ece16b936aca630789ad52830c872443"
+    },
+    {
+      "periodo": "2024-01",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 25876846.3129,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN enero 2024 v2024 02 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2024-01.json",
+      "sha256_csv": "98bc9e6bead83c3c23abac2f19b7ae931b62bad2350af5d2fb7f5175c5d65552"
+    },
+    {
+      "periodo": "2024-02",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 696,
+      "total_mwh": 24345371.394,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN febrero 2024 v2024 03 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2024-02.json",
+      "sha256_csv": "73554fd5421514c74a55ed938acfd5eedce2e6f46ce93d300f0ce83a4743e3aa"
+    },
+    {
+      "periodo": "2024-03",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 27310038.8119,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN marzo 2024 v2024 04 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2024-03.json",
+      "sha256_csv": "5fa884b9cebc857dc9406aa314d96199dd1310a311d1438b80d7feb4a5422f30"
+    },
+    {
+      "periodo": "2024-04",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 720,
+      "total_mwh": 29087765.5943,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN abril 2024 v2024 05 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2024-04.json",
+      "sha256_csv": "f98c31bb941ad484e3abd193ec9175387b660f87e6316e364b13e22334e2f818"
+    },
+    {
+      "periodo": "2024-05",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 33725246.8073,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN mayo 2024 v2024 06 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2024-05.json",
+      "sha256_csv": "1186acc20df09a4531bcb828fb9fa39ce8df4863191a1bf279d2def8309fcdef"
+    },
+    {
+      "periodo": "2024-06",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 720,
+      "total_mwh": 32568231.9206,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN junio 2024 v2024 07 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2024-06.json",
+      "sha256_csv": "b32f88995fba99dcdda63a0240b024540c1b7ddec9cce83b03e6abe2646260e2"
+    },
+    {
+      "periodo": "2024-07",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 32680821.077,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN julio 2024 v2024 08 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2024-07.json",
+      "sha256_csv": "46ac14c790eee02c417ac0bdd93e5ff239ba1f297ac935cbac496af59460a223"
+    },
+    {
+      "periodo": "2024-08",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 33925845.8256,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN agosto 2024 v2024 09 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2024-08.json",
+      "sha256_csv": "561d3461cbef36983e125fa8f993570ff309b39cbccea10c8bf49c10fcd50964"
+    },
+    {
+      "periodo": "2024-09",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 720,
+      "total_mwh": 31075574.1806,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN septiembre 2024 v2024 10 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2024-09.json",
+      "sha256_csv": "be0a89692a1f54054a8502390f108a143a1bb15d469c51038512d605e6d3de50"
+    },
+    {
+      "periodo": "2024-10",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 29797013.6615,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN octubre 2024 v2024 11 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2024-10.json",
+      "sha256_csv": "9ad9359e8a492495dfbb2f26c5d20a8fe4f95ba19862c35984837d3a2193f912"
+    },
+    {
+      "periodo": "2024-12",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 25079477.6579,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN diciembre 2024 v2025 01 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2024-12.json",
+      "sha256_csv": "12fcc87a80fba6d56e69305c7bae1014b880f602ce0aae96068c170bed6a0c05"
+    },
+    {
+      "periodo": "2025-01",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 26291475.8952,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN enero 2025 v2025 02 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2025-01.json",
+      "sha256_csv": "47936e9fff8f4aa80b00d793d437c522804d1ab5a7965d28521a6cb629c9870d"
+    },
+    {
+      "periodo": "2025-02",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 672,
+      "total_mwh": 24393138.828,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN febrero 2025 v2025 03 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2025-02.json",
+      "sha256_csv": "6f95007fbc95f5e7e68e536c1cc05aa97777e300d63664459384f157daf4a6af"
+    },
+    {
+      "periodo": "2025-03",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 27928615.7827,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN marzo 2025 v2025 04 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2025-03.json",
+      "sha256_csv": "d3371b0e97a70e20d891a2cf4754acc631780f2388ead6ce1b73bb9213163d82"
+    },
+    {
+      "periodo": "2025-04",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 720,
+      "total_mwh": 28846212.568,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN abril 2025 v2025 05 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2025-04.json",
+      "sha256_csv": "591282341018bb543221343479f3504f0650f835351d188a243b5f6f907d722a"
+    },
+    {
+      "periodo": "2025-05",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 32830594.7008,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN mayo 2025 v2025 06 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2025-05.json",
+      "sha256_csv": "861b688ebff12a78e2e081a354f7c7a8170c3181bc3393f17a2f3d26319beff2"
+    },
+    {
+      "periodo": "2025-06",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 720,
+      "total_mwh": 32235339.5124,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN junio 2025 v2025 07 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2025-06.json",
+      "sha256_csv": "1b980f5f02831bd7ebdaf77a28e114082ce17a532257b2c021e1ca40e140690e"
+    },
+    {
+      "periodo": "2025-07",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 33019018.047,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN julio 2025 v2025 08 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2025-07.json",
+      "sha256_csv": "bedb082cf3d295645342fc052d73d5bb89aa8e5305d00bcf96c3b59753143e50"
+    },
+    {
+      "periodo": "2025-08",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 33830818.4656,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN agosto 2025 v2025 09 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2025-08.json",
+      "sha256_csv": "839dce53f2eb49bc6746f29227d310dc0281b0d8757748df1220035531353439"
+    },
+    {
+      "periodo": "2025-09",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 720,
+      "total_mwh": 31068576.1976,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN septiembre 2025 v2025 10 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2025-09.json",
+      "sha256_csv": "3d81244b8f2939961057722acb20179da51edf2a56bd67d75fa5eda559e6c42e"
+    },
+    {
+      "periodo": "2025-10",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 30314865.4416,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN octubre 2025 v2025 11 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2025-10.json",
+      "sha256_csv": "5932b3d6bbec1110d1309ee302ba003783447d0903c2a07ece555d756f9ffeec"
+    },
+    {
+      "periodo": "2025-12",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 26027669.7998,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN diciembre 2025 v2026 01 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2025-12.json",
+      "sha256_csv": "4c637aacf31891f5ff8c0932898bcb45500b416e3db6d46ccc1c303d10d14765"
+    },
+    {
+      "periodo": "2026-01",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 26439594.3311,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN enero 2026 v2026 02 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2026-01.json",
+      "sha256_csv": "8c1dd8b2793f4d17914ca9917ab059a947e94b9a1beb14046b0dc3eebff7bca9"
+    },
+    {
+      "periodo": "2026-02",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 672,
+      "total_mwh": 24535395.1681,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN febrero 2026 v2026 03 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2026-02.json",
+      "sha256_csv": "d0cdd485f1716b3a742fca68340af42f7def734c2446947a43a787ab16802af7"
+    },
+    {
+      "periodo": "2026-03",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 29188912.941,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN marzo 2026 v2026 04 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2026-03.json",
+      "sha256_csv": "e622bfb52c248fa8adedd327c75990264ecfee77e15d8e88379920e3161ae1fb"
+    },
+    {
+      "periodo": "2026-04",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 720,
+      "total_mwh": 29898236.0094,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN abril 2026 v2026 05 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2026-04.json",
+      "sha256_csv": "3f91d4f5657eec2b9e992b2e88e5c0f2325c3cc72fe4e9a9e246c3e82e901751"
+    },
+    {
+      "periodo": "2026-05",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 33470202.1731,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN mayo 2026 v2026 06 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2026-05.json",
+      "sha256_csv": "a97af4ffeb476b255e8b97b643ac5f96df96043ec98797459f137114e54f1a56"
+    },
+    {
+      "periodo": "2026-06",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 720,
+      "total_mwh": 33408271.1649,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN junio 2026 v2026 07 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2026-06.json",
+      "sha256_csv": "4bed4a7b6db9c3c92012eda7ee372e828dcc87da2a7b0002364c571dd31796ac"
+    },
+    {
+      "periodo": "2026-07",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 35267312.3673,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN julio 2026 v2026 08 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2026-07.json",
+      "sha256_csv": "483e5e59ba3245ae1f7466d969458ed8327dadbe5bc45c84d92a833ff4da20e6"
+    },
+    {
+      "periodo": "2026-08",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 35910165.3567,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN agosto 2026 v2026 09 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2026-08.json",
+      "sha256_csv": "51c24e91ce07bbd26efad0cc685fb693f721589f290ed0574da83dd7ef387fe2"
+    }
+  ]
+}

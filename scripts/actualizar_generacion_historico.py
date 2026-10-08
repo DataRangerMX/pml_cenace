@@ -84,7 +84,18 @@ def main():
                 time.sleep(args.pausa)
             try:
                 anio, mes = map(int, periodo.split('-'))
-                contenido, fuente = descargar(sesion, anio, mes)
+                # Reintentos solo para errores de transporte, sin relajar validaciones.
+                for intento in range(1, 4):
+                    try:
+                        contenido, fuente = descargar(sesion, anio, mes)
+                        break
+                    except requests.RequestException as exc:
+                        if intento == 3:
+                            raise
+                        espera = 3 * intento
+                        print(f'REINTENTO {periodo} ({intento}/3): {exc}; espera {espera}s', flush=True)
+                        time.sleep(espera)
+                        sesion.cookies.clear()
                 resultado = procesar_csv(contenido, anio, mes)
                 sha = hashlib.sha256(contenido).hexdigest()
                 nuevo = {

@@ -23,7 +23,7 @@ jobs:
         run: python -m pip install requests beautifulsoup4
 
       - name: Probar descarga del SIM
-        run: python scripts/probar_descarga_sim_julio.py
+        run: python scripts/probar_descarga_sim_julio_corregido.py
 
       - name: Guardar archivos de diagnóstico
         if: always()

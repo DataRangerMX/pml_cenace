@@ -129,6 +129,7 @@ def procesar_csv(data, year, month):
     hourly = []
     by_day = defaultdict(lambda: defaultdict(float))
     by_hour = defaultdict(lambda: defaultdict(float))
+    horas_por_dia = defaultdict(set)
     totals = defaultdict(float)
     for idx, row in enumerate(rows[8:], 9):
         if not any(x.strip() for x in row):
@@ -138,12 +139,13 @@ def procesar_csv(data, year, month):
         sistema, fecha_txt, hora_txt = [v.strip() for v in row[:3]]
         fecha = datetime.strptime(fecha_txt, '%d/%m/%Y').date()
         hora = int(hora_txt)
-        if sistema != 'SEN' or fecha.year != year or fecha.month != month or not 1 <= hora <= 24:
-            raise ValueError(f'Fila {idx}: sistema, fecha u hora fuera del periodo')
+        if sistema != 'SEN' or fecha.year != year or fecha.month != month or not 1 <= hora <= 25:
+            raise ValueError(f'Fila {idx}: sistema={sistema!r}, fecha={fecha_txt!r}, hora={hora_txt!r} fuera del periodo {year}-{month:02d}')
         key = (fecha.isoformat(), hora)
         if key in seen:
             raise ValueError(f'Duplicado: {key}')
         seen.add(key)
+        horas_por_dia[fecha.isoformat()].add(hora)
         vals = {}
         for tech, raw in zip(TECNOS, row[3:]):
             number = float(raw.strip())
@@ -155,16 +157,28 @@ def procesar_csv(data, year, month):
             by_hour[hora][tech] += number
         hourly.append({'fecha': fecha.isoformat(), 'hora': hora, 'sistema': 'SEN', 'tecnologias_mwh': vals, 'total_mwh': round(sum(vals.values()), 4)})
     days = calendar.monthrange(year, month)[1]
-    if len(seen) != days * 24 or any((date(year, month, day).isoformat(), hour) not in seen for day in range(1, days+1) for hour in range(1, 25)):
-        raise ValueError(f'Cobertura horaria incompleta: {len(seen)} de {days*24}')
+    # El SIM puede publicar días operativos de 23 o 25 horas.
+    # Conservar su numeración original; exigir horas consecutivas 1..N.
+    dias_especiales = []
+    for day in range(1, days + 1):
+        dia = date(year, month, day).isoformat()
+        horas = horas_por_dia.get(dia, set())
+        if len(horas) not in (23, 24, 25) or horas != set(range(1, len(horas) + 1)):
+            faltantes = sorted(set(range(1, 25)) - horas)
+            raise ValueError(f'Cobertura horaria inválida {dia}: {len(horas)} horas; faltantes 1..24={faltantes}; horas={sorted(horas)}')
+        if len(horas) != 24:
+            dias_especiales.append({'fecha': dia, 'horas': len(horas), 'tipo': 'horario_especial_reportado'})
+    if len(dias_especiales) > 1:
+        raise ValueError(f'Más de un día de horario especial en {year}-{month:02d}: {dias_especiales}; requiere revisión')
     def r4(v): return round(v, 4)
     return {
         'periodo': f'{year}-{month:02d}', 'sistema': 'SEN', 'liquidacion': 'L0', 'unidad': 'MWh',
         'agregacion': 'SEN (sin desglose SIN/BCA/BCS)', 'horas': len(hourly),
+        'dias_horario_especial': dias_especiales,
         'total_mwh': r4(sum(totals.values())),
         'totales_tecnologia_mwh': {t: r4(totals[t]) for t in TECNOS},
         'diario': [{'fecha': d, 'total_mwh': r4(sum(by_day[d].values())), 'tecnologias_mwh': {t: r4(by_day[d][t]) for t in TECNOS}} for d in sorted(by_day)],
-        'perfil_horario': [{'hora': h, 'total_mwh': r4(sum(by_hour[h].values())), 'tecnologias_mwh': {t: r4(by_hour[h][t]) for t in TECNOS}} for h in range(1, 25)],
+        'perfil_horario': [{'hora': h, 'total_mwh': r4(sum(by_hour[h].values())), 'tecnologias_mwh': {t: r4(by_hour[h][t]) for t in TECNOS}} for h in range(1, 26) if h in by_hour],
         'horario': hourly,
     }
 

@@ -3,7 +3,9 @@ name: Actualizar PML MDA y MTR
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 18 * * *"
+    - cron: "40 17 * * *"
+      timezone: "America/Mexico_City"
+    - cron: "30 18 * * *"
       timezone: "America/Mexico_City"
 permissions:
   contents: write

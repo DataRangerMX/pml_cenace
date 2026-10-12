@@ -172,7 +172,7 @@
     "sistema": "SIN",
     "orden": 1,
     "rango": "<0",
-    "observaciones": 0,
+    "observaciones": 1,
     "participacion": 0.0
   },
   {
@@ -180,40 +180,40 @@
     "sistema": "SIN",
     "orden": 2,
     "rango": "0-500",
-    "observaciones": 39966,
-    "participacion": 67.75
+    "observaciones": 7729,
+    "participacion": 13.1
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "orden": 3,
     "rango": "500-1,000",
-    "observaciones": 19008,
-    "participacion": 32.22
+    "observaciones": 43539,
+    "participacion": 73.8
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "orden": 4,
     "rango": "1,000-2,000",
-    "observaciones": 0,
-    "participacion": 0.0
+    "observaciones": 7693,
+    "participacion": 13.04
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "orden": 5,
     "rango": "2,000-5,000",
-    "observaciones": 12,
-    "participacion": 0.02
+    "observaciones": 21,
+    "participacion": 0.04
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "orden": 6,
     "rango": "5,000-10,000",
-    "observaciones": 6,
-    "participacion": 0.01
+    "observaciones": 9,
+    "participacion": 0.02
   },
   {
     "proceso": "MTR",
@@ -236,24 +236,24 @@
     "sistema": "BCA",
     "orden": 2,
     "rango": "0-500",
-    "observaciones": 292,
-    "participacion": 10.06
+    "observaciones": 0,
+    "participacion": 0.0
   },
   {
     "proceso": "MTR",
     "sistema": "BCA",
     "orden": 3,
     "rango": "500-1,000",
-    "observaciones": 673,
-    "participacion": 23.17
+    "observaciones": 1680,
+    "participacion": 57.85
   },
   {
     "proceso": "MTR",
     "sistema": "BCA",
     "orden": 4,
     "rango": "1,000-2,000",
-    "observaciones": 1697,
-    "participacion": 58.44
+    "observaciones": 982,
+    "participacion": 33.82
   },
   {
     "proceso": "MTR",
@@ -316,16 +316,16 @@
     "sistema": "BCS",
     "orden": 5,
     "rango": "2,000-5,000",
-    "observaciones": 674,
-    "participacion": 90.59
+    "observaciones": 430,
+    "participacion": 57.8
   },
   {
     "proceso": "MTR",
     "sistema": "BCS",
     "orden": 6,
     "rango": "5,000-10,000",
-    "observaciones": 70,
-    "participacion": 9.41
+    "observaciones": 314,
+    "participacion": 42.2
   },
   {
     "proceso": "MTR",

@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PML | Mercado Eléctrico Mayorista</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #07111f;
+            --panel: #0d1b2d;
+            --panel2: #112238;
+            --border: #213a58;
+            --text: #eef5ff;
+            --muted: #8fa8c2;
+            --blue: #38bdf8;
+            --green: #34d399;
+            --orange: #f59e0b;
+            --red: #fb7185;
+            --purple: #a78bfa;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at top right, #102d4e 0, transparent 30%),
+                var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .container {
+            width: min(1500px, 94%);
+            margin: auto;
+            padding: 28px 0 50px;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .titulo h1 {
+            font-size: clamp(26px, 4vw, 42px);
+            margin-bottom: 7px;
+        }
+
+        .titulo h1 span {
+            color: var(--blue);
+        }
+
+        .titulo p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .estado {
+            border: 1px solid var(--border);
+            background: rgba(13, 27, 45, .85);
+            border-radius: 14px;
+            padding: 13px 17px;
+            color: var(--muted);
+            min-width: 250px;
+        }
+
+        .estado strong {
+            color: var(--green);
+        }
+
+        /* =========================
+           FILTROS
+        ========================= */
+
+        .filtros {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+            padding: 18px;
+            background: rgba(13, 27, 45, .9);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .filtro label {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+        }
+
+        select {
+            width: 100%;
+            background: #081522;
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 11px;
+            border-radius: 9px;
+            outline: none;
+        }
+
+        select:focus {
+            border-color: var(--blue);
+        }
+
+        /* =========================
+           KPIs
+        ========================= */
+
+        .kpis {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: linear-gradient(
+                145deg,
+                rgba(17, 34, 56, .98),
+                rgba(10, 23, 39, .98)
+            );
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 19px;
+            min-height: 115px;
+        }
+
+        .card .label {
+            color: var(--muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            margin-bottom: 12px;
+        }
+
+        .card .valor {
+            font-size: clamp(21px, 3vw, 31px);
+            font-weight: bold;
+        }
+
+        .card .sub {
+            color: var(--muted);
+            margin-top: 8px;
+            font-size: 13px;
+        }
+
+        .blue {
+            color: var(--blue);
+        }
+
+        .green {
+            color: var(--green);
+        }
+
+        .red {
+            color: var(--red);
+        }
+
+        .purple {
+            color: var(--purple);
+        }
+
+        /* =========================
+           PANELES
+        ========================= */
+
+        .grid-principal {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .grid-secundario {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .panel {
+            background: rgba(13, 27, 45, .92);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .panel h2 {
+            font-size: 17px;
+            margin-bottom: 4px;
+        }
+
+        .panel .descripcion {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .chart-box {
+            position: relative;
+            height: 360px;
+        }
+
+        .chart-box.small {
+            height: 330px;
+        }
+
+        /* =========================
+           EXTREMOS
+        ========================= */
+
+        .extremo {
+            background: #081522;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 13px;
+        }
+
+        .extremo:last-child {
+            margin-bottom: 0;
+        }
+
+        .extremo .tipo {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .extremo .precio {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 9px;
+        }
+
+        .extremo p {
+            color: var(--muted);
+            font-size: 13px;
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+
+        .extremo p strong {
+            color: var(--text);
+        }
+
+        /* =========================
+           TABLA GERENCIAS
+        ========================= */
+
+        .tabla-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th {
+            color: var(--muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+            text-align: left;
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(33, 58, 88, .6);
+            font-size: 13px;
+        }
+
+        tr:hover td {
+            background: rgba(56, 189, 248, .04);
+        }
+
+        .precio-tabla {
+            font-weight: bold;
+        }
+
+        /* =========================
+           INFORMACIÓN
+        ========================= */
+
+        .info {
+            margin-top: 18px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .error {
+            background: rgba(251, 113, 133, .1);
+            border: 1px solid var(--red);
+            padding: 15px;
+            border-radius: 12px;
+            color: #fecdd3;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media(max-width: 1050px) {
+            .kpis {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid-principal,
+            .grid-secundario {
+                grid-template-columns: 1fr;
+            }
+
+            .filtros {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width: 650px) {
+            header {
+                flex-direction: column;
+            }
+
+            .estado {
+                width: 100%;
+            }
+
+            .kpis,
+            .filtros {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+            .chart-box {
+                height: 300px;
+            }
+        }
+        #mapaEntidades { height: 500px; border-radius: 12px; background: #0a1c2e; border: 1px solid var(--border); z-index: 0; }
+        .leaflet-container { background: #0a1c2e; font-family: Arial, sans-serif; }
+        .mapa-leyenda { display:flex; align-items:center; gap:10px; flex-wrap:wrap; color:var(--muted); font-size:12px; margin-top:12px; }
+        .mapa-gradiente { width:180px; height:12px; border-radius:6px; background:linear-gradient(to right,#bae6fd,#38bdf8,#0369a1,#082f49); }
+        .leaflet-tooltip { color:#0b1727; }
+    </style>
+</head>
+
+<body>
+<div style="background:#0d1b2d;border-bottom:1px solid #213a58;padding:14px 3%;display:flex;gap:18px;align-items:center;flex-wrap:wrap;font-family:Arial,sans-serif"><a href="../" style="color:#38bdf8;text-decoration:none;font-weight:bold">⌂ Inicio</a><strong style="color:#eef5ff">PML Analytics</strong><a href="../generacion/" style="color:#eef5ff;text-decoration:none">Energía inyectada ↗</a></div>
+
+<div class="container">
+
+    <header>
+        <div class="titulo">
+            <h1>
+                PML <span>Analytics</span>
+            </h1>
+
+            <p>
+                Análisis de Precios Marginales Locales del
+                Mercado Eléctrico Mayorista
+            </p>
+        </div>
+
+        <div class="estado">
+            <div>
+                Fuente:
+                <strong>CENACE SW-PML</strong>
+            </div>
+
+            <div id="fechasDatos">
+                Cargando información...
+            </div>
+        </div>
+    </header>
+
+
+    <div id="mensajeError" class="error"></div>
+
+
+    <!-- FILTROS -->
+
+    <section class="filtros">
+
+        <div class="filtro">
+            <label>Mercado</label>
+
+            <select id="filtroProceso">
+                <option value="MDA">
+                    MDA
+                </option>
+
+                <option value="MTR">
+                    MTR Ex-post
+                </option>
+            </select>
+        </div>
+
+
+        <div class="filtro">
+            <label>Sistema</label>
+
+            <select id="filtroSistema">
+                <option value="SIN">
+                    SIN
+                </option>
+
+                <option value="BCA">
+                    BCA
+                </option>
+
+                <option value="BCS">
+                    BCS
+                </option>
+            </select>
+        </div>
+
+
+        <div class="filtro">
+            <label>Gerencia</label>
+
+            <select id="filtroGerencia">
+                <option value="TODAS">
+                    Todas
+                </option>
+            </select>
+        </div>
+
+
+        <div class="filtro">
+            <label>Entidad federativa</label>
+
+            <select id="filtroEntidad">
+                <option value="TODAS">
+                    Todas
+                </option>
+            </select>
+        </div>
+
+        <div class="filtro">
+            <label for="filtroNodo">NodoP</label>
+            <select id="filtroNodo"><option value="TODAS">Todos</option></select>
+        </div>
+
+    </section>
+
+
+    <!-- KPIs -->
+
+    <section class="kpis">
+
+        <div class="card">
+            <div class="label">
+                PML promedio
+            </div>
+
+            <div
+                class="valor blue"
+                id="kpiPromedio"
+            >
+                —
+            </div>
+
+            <div class="sub">
+                Promedio simple NodoP-hora
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="label">
+                PML máximo
+            </div>
+
+            <div
+                class="valor red"
+                id="kpiMax"
+            >
+                —
+            </div>
+
+            <div
+                class="sub"
+                id="kpiMaxDetalle"
+            >
+                —
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="label">
+                PML mínimo
+            </div>
+
+            <div
+                class="valor green"
+                id="kpiMin"
+            >
+                —
+            </div>
+
+            <div
+                class="sub"
+                id="kpiMinDetalle"
+            >
+                —
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="label">
+                NodoP
+            </div>
+
+            <div
+                class="valor purple"
+                id="kpiNodos"
+            >
+                —
+            </div>
+
+            <div
+                class="sub"
+                id="kpiObservaciones"
+            >
+                —
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- GRÁFICA HORARIA + EXTREMOS -->
+
+    <section class="grid-principal">
+
+        <div class="panel">
+
+            <h2>
+                PML promedio horario
+            </h2>
+
+            <div class="descripcion">
+                Evolución promedio del PML y sus componentes
+                durante las 24 horas del día.
+            </div>
+
+            <div class="chart-box">
+                <canvas id="graficaHoraria"></canvas>
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <h2>
+                Extremos del mercado
+            </h2>
+
+            <div class="descripcion">
+                NodoP con el mayor y menor PML observado.
+            </div>
+
+            <div
+                id="extremoMax"
+                class="extremo"
+            ></div>
+
+            <div
+                id="extremoMin"
+                class="extremo"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- DISTRIBUCIÓN + GERENCIA -->
+
+    <section class="grid-secundario">
+
+        <div class="panel">
+
+            <h2>
+                Distribución del PML
+            </h2>
+
+            <div class="descripcion">
+                Participación de las observaciones por rango de precio.
+            </div>
+
+            <div class="chart-box small">
+                <canvas id="graficaDistribucion"></canvas>
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <h2>
+                PML por gerencia
+            </h2>
+
+            <div class="descripcion">
+                Comparación del PML promedio por Gerencia 
+            </div>
+
+            <div class="chart-box small">
+                <canvas id="graficaGerencias"></canvas>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TABLA -->
+
+    <section class="panel">
+
+        <h2>
+            Análisis por Gerencia
+        </h2>
+
+        <div class="descripcion">
+            Resumen de NodoP, PML promedio, máximo y mínimo.
+        </div>
+
+        <div class="tabla-wrap">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Gerencia</th>
+                        <th>NodoP</th>
+                        <th>PML promedio</th>
+                        <th>PML máximo</th>
+                        <th>PML mínimo</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tablaGerencias">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <section class="panel" style="margin-top:18px">
+        <h2>PML promedio por entidad federativa</h2>
+        <div class="descripcion">Promedio simple de las observaciones NodoP-hora de cada entidad dentro de los filtros seleccionados.</div>
+        <div id="mapaEntidades" aria-label="Mapa de México por entidad federativa"></div>
+        <div id="estadoMapa" class="descripcion" style="margin-top:10px">Cargando límites geográficos de México...</div>
+        <div class="mapa-leyenda"><span>Menor PML</span><div class="mapa-gradiente"></div><span>Mayor PML</span><span>· Gris: sin observaciones</span></div>
+        <div class="tabla-wrap" style="margin-top:20px">
+            <table><thead><tr><th>Entidad</th><th>NodoP</th><th>Observaciones</th><th>PML promedio</th><th>PML máximo</th><th>PML mínimo</th></tr></thead>
+            <tbody id="tablaEntidades"></tbody></table>
+        </div>
+    </section>
+
+    <div class="info">
+        Los valores mostrados corresponden a promedios simples
+        de las observaciones NodoP-hora disponibles.
+        MDA y MTR pueden corresponder a fechas de operación distintas.
+    </div>
+
+</div>
+
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const dineroFormato = new Intl.NumberFormat('es-MX', {style:'currency',currency:'MXN',minimumFractionDigits:2,maximumFractionDigits:2});
+const numeroFormato = new Intl.NumberFormat('es-MX');
+const dinero = x => Number.isFinite(Number(x)) && x !== null ? dineroFormato.format(Number(x)) : '—';
+const numero = x => numeroFormato.format(x);
+const esc = value => String(value ?? '—').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const RANGOS = ['<0','0-500','500-1,000','1,000-2,000','2,000-5,000','5,000-10,000','10,000 o más'];
+let metadata, catalogo, registros = [], charts = {}, porProcesoSistema = new Map();
+const LLAVE = (s,n) => `${s}\u0000${n}`;
+const avg = (s,n) => n ? s/n : null;
+const fechaMX = fecha => fecha ? fecha.split('-').reverse().join('/') : '—';
+async function cargarJSON(nombre) {
+    const r = await fetch('../dashboard_data/'+nombre+'?t='+Date.now());
+    if(!r.ok) throw new Error(`No se pudo cargar ${nombre} (HTTP ${r.status})`);
+    return r.json();
+}
+function elegir(id) {return $(id).value;}
+function actualizarSelect(id, valores, titulo) {
+    const el=$(id), anterior=el.value;
+    el.replaceChildren(new Option(titulo,'TODAS'));
+    valores.sort((a,b)=>a.localeCompare(b,'es')).forEach(v=>el.add(new Option(v,v)));
+    el.value = valores.includes(anterior) ? anterior : 'TODAS';
+}
+function unicos(lista, campo) {return [...new Set(lista.map(x=>x[campo]).filter(x=>x !== null && x !== undefined && x !== ''))];}
+function filtrarBase() {
+    return porProcesoSistema.get(elegir('filtroProceso')+'|'+elegir('filtroSistema')) || [];
+}
+function cascada() {
+    const base=filtrarBase();
+    actualizarSelect('filtroGerencia',unicos(base,'gerencia'),'Todas');
+    const g=elegir('filtroGerencia');
+    const porGerencia=g==='TODAS' ? base : base.filter(x=>x.gerencia===g);
+    actualizarSelect('filtroEntidad',unicos(porGerencia,'entidad'),'Todas');
+    const e=elegir('filtroEntidad');
+    const porEntidad=e==='TODAS' ? porGerencia : porGerencia.filter(x=>x.entidad===e);
+    const nodos=unicos(porEntidad,'nodo');
+    actualizarSelect('filtroNodo',nodos,'Todos');
+    actualizarDashboard();
+}
+function datosFiltrados() {
+    const g=elegir('filtroGerencia'), e=elegir('filtroEntidad'), n=elegir('filtroNodo');
+    return filtrarBase().filter(x=>(g==='TODAS'||x.gerencia===g)&&(e==='TODAS'||x.entidad===e)&&(n==='TODAS'||x.nodo===n));
+}
+function agregar(datos,campo) {
+    const mapa=new Map();
+    for(const x of datos) {
+        const clave=x[campo] || 'Sin dato en catálogo';
+        if(!mapa.has(clave)) mapa.set(clave,{nombre:clave,suma:0,conteo:0,min:Infinity,max:-Infinity,nodos:new Set()});
+        const a=mapa.get(clave);a.suma+=x.pml;a.conteo++;a.min=Math.min(a.min,x.pml);a.max=Math.max(a.max,x.pml);a.nodos.add(x.nodo);
+    }
+    return [...mapa.values()].map(x=>({nombre:x.nombre,promedio:avg(x.suma,x.conteo),min:x.min,max:x.max,conteo:x.conteo,nodos:x.nodos.size})).sort((a,b)=>b.promedio-a.promedio);
+}
+function crearGrafica(id, tipo, labels, datasets, options={}) {
+    if(charts[id]) charts[id].destroy();
+    const base={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#cbd5e1'}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${dinero(c.raw)}${id==='graficaDistribucion'?'%':'/MWh'}`}}},scales:{x:{ticks:{color:'#8fa8c2'},grid:{color:'rgba(143,168,194,.08)'}},y:{ticks:{color:'#8fa8c2'},grid:{color:'rgba(143,168,194,.08)'}}}};
+    if(id==='graficaDistribucion') {
+        base.indexAxis='y';base.plugins.legend.display=false;
+        base.plugins.tooltip.callbacks.label=c=>`${c.raw.toFixed(2)}%`;
+        base.scales.x.beginAtZero=true;
+    }
+    charts[id]=new Chart($(id),{type:tipo,data:{labels,datasets},options:{...base,...options}});
+}
+function mostrarKPIs(datos) {
+    let suma=0, max=null,min=null;const nodos=new Set();
+    for(const x of datos){suma+=x.pml;nodos.add(x.nodo);if(!max||x.pml>max.pml)max=x;if(!min||x.pml<min.pml)min=x;}
+    $('kpiPromedio').textContent=dinero(avg(suma,datos.length));
+    $('kpiMax').textContent=dinero(max?.pml ?? null);
+    $('kpiMin').textContent=dinero(min?.pml ?? null);
+    $('kpiNodos').textContent=numero(nodos.size);
+    $('kpiObservaciones').textContent=numero(datos.length)+' observaciones';
+    $('kpiMaxDetalle').textContent=max?`${max.nodo} · H${max.hora}`:'—';
+    $('kpiMinDetalle').textContent=min?`${min.nodo} · H${min.hora}`:'—';
+    const detalle=(x,t)=>!x?'Sin información para los filtros seleccionados':`<div class="tipo">${t}</div><div class="precio ${t.includes('MÁXIMO')?'red':'green'}">${dinero(x.pml)}</div><p><strong>NodoP:</strong> ${esc(x.nodo)}</p><p><strong>Nombre:</strong> ${esc(x.nombre)}</p><p><strong>Hora:</strong> H${x.hora}</p><p><strong>Gerencia:</strong> ${esc(x.gerencia)}</p><p><strong>Entidad:</strong> ${esc(x.entidad)}</p><p><strong>Municipio:</strong> ${esc(x.municipio)}</p><p><strong>Energía:</strong> ${dinero(x.energia)}</p><p><strong>Pérdidas:</strong> ${dinero(x.perdidas)}</p><p><strong>Congestión:</strong> ${dinero(x.congestion)}</p>`;
+    $('extremoMax').innerHTML=detalle(max,'PML MÁXIMO');
+    $('extremoMin').innerHTML=detalle(min,'PML MÍNIMO');
+}
+function mostrarHorario(datos){
+    const grupos=Array.from({length:24},()=>({n:0,pml:0,energia:0,perdidas:0,congestion:0}));
+    for(const x of datos){if(x.hora<1||x.hora>24)continue;const a=grupos[x.hora-1];a.n++;for(const k of ['pml','energia','perdidas','congestion'])a[k]+=x[k];}
+    const colores={pml:'#38bdf8',energia:'#34d399',perdidas:'#f59e0b',congestion:'#fb7185'};
+    const nombres={pml:'PML',energia:'Energía',perdidas:'Pérdidas',congestion:'Congestión'};
+    crearGrafica('graficaHoraria','line',grupos.map((_,i)=>'H'+(i+1)),Object.keys(colores).map(k=>({label:nombres[k],data:grupos.map(a=>avg(a[k],a.n)),borderColor:colores[k],borderWidth:k==='pml'?3:2,pointRadius:1,tension:.25})));
+}
+function mostrarDistribucion(datos){
+    const cuenta=Array(7).fill(0);
+    for(const x of datos){const p=x.pml;cuenta[p<0?0:p<500?1:p<1000?2:p<2000?3:p<5000?4:p<10000?5:6]++;}
+    crearGrafica('graficaDistribucion','bar',RANGOS,[{label:'Participación (%)',data:cuenta.map(n=>datos.length?100*n/datos.length:0),backgroundColor:['#fb7185','#38bdf8','#22d3ee','#34d399','#a78bfa','#f59e0b','#ef4444']}]);
+}
+function mostrarAgrupado(datos,campo,idGrafica,idTabla){
+    const grupos=agregar(datos,campo);
+    crearGrafica(idGrafica,'bar',grupos.map(x=>x.nombre),[{label:'PML promedio',data:grupos.map(x=>x.promedio),backgroundColor:'#38bdf8'}]);
+    $(idTabla).replaceChildren();
+    if(!grupos.length){const tr=document.createElement('tr');const td=document.createElement('td');td.colSpan=idTabla==='tablaEntidades'?6:5;td.textContent='Sin observaciones para la selección.';tr.append(td);$(idTabla).append(tr);return;}
+    for(const x of grupos){const tr=document.createElement('tr');const campos=idTabla==='tablaEntidades'?[x.nombre,numero(x.nodos),numero(x.conteo),dinero(x.promedio),dinero(x.max),dinero(x.min)]:[x.nombre,numero(x.nodos),dinero(x.promedio),dinero(x.max),dinero(x.min)];for(const val of campos){const td=document.createElement('td');td.textContent=val;tr.append(td);}$(idTabla).append(tr);}
+}
+
+// MAPA DE ENTIDADES: límites geográficos externos; valores siempre calculados con los filtros activos.
+const GEOJSON_URL='../dashboard_data/estados_mexico.geojson';
+const NOMBRES_ESTADOS=['','AGUASCALIENTES','BAJA CALIFORNIA','BAJA CALIFORNIA SUR','CAMPECHE','COAHUILA DE ZARAGOZA','COLIMA','CHIAPAS','CHIHUAHUA','CIUDAD DE MEXICO','DURANGO','GUANAJUATO','GUERRERO','HIDALGO','JALISCO','MEXICO','MICHOACAN DE OCAMPO','MORELOS','NAYARIT','NUEVO LEON','OAXACA','PUEBLA','QUERETARO','QUINTANA ROO','SAN LUIS POTOSI','SINALOA','SONORA','TABASCO','TAMAULIPAS','TLAXCALA','VERACRUZ DE IGNACIO DE LA LLAVE','YUCATAN','ZACATECAS'];
+const ALIAS_ESTADOS={'DISTRITO FEDERAL':'CIUDAD DE MEXICO','VERACRUZ':'VERACRUZ DE IGNACIO DE LA LLAVE','MICHOACAN':'MICHOACAN DE OCAMPO','COAHUILA':'COAHUILA DE ZARAGOZA','ESTADO DE MEXICO':'MEXICO','QUERETARO DE ARTEAGA':'QUERETARO'};
+const normalizarEstado=v=>{const k=String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z ]/g,' ').replace(/\s+/g,' ').trim();return ALIAS_ESTADOS[k]||k;};
+let mapaLeaflet=null, capaEstados=null, limitesGeo=null, geoError=null;
+function claveEstado(feature){
+    const p=feature.properties||{};
+    const c=String(p.CVE_ENT||p.cve_ent||p.CVEGEO||p.cvegeo||p.id||'').padStart(2,'0').slice(0,2);
+    if(/^\d{2}$/.test(c) && Number(c)>=1 && Number(c)<=32)return NOMBRES_ESTADOS[Number(c)];
+    return normalizarEstado(p.NOMGEO||p.nomgeo||p.NOM_ENT||p.name||p.nombre||'');
+}
+async function iniciarMapa(){
+    try{
+        if(!window.L)throw new Error('No se cargó la biblioteca Leaflet');
+        mapaLeaflet=L.map('mapaEntidades',{scrollWheelZoom:false,zoomControl:true,attributionControl:false});
+        const respuesta=await fetch(GEOJSON_URL);
+        if(!respuesta.ok)throw new Error('HTTP '+respuesta.status);
+        limitesGeo=await respuesta.json();
+        if(!limitesGeo.features?.length)throw new Error('El archivo no contiene entidades');
+        actualizarMapa(datosFiltrados());
+        $('estadoMapa').textContent='Selecciona un estado para filtrar la entidad federativa. Pasa el cursor para ver su precio.';
+    }catch(e){geoError=e.message; $('estadoMapa').textContent='No fue posible cargar el mapa geográfico: '+geoError+'. La tabla de entidades sigue disponible.';}
+}
+function colorPrecio(precio,min,max){
+    if(precio===null)return '#455568';
+    const t=max>min?(precio-min)/(max-min):0.5;
+    const a=[186,230,253],b=[3,105,161];
+    return 'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(',')+')';
+}
+function actualizarMapa(datos){
+    if(!mapaLeaflet||!limitesGeo)return;
+    const grupos=agregar(datos,'entidad');
+    const porEstado=new Map(grupos.map(g=>[normalizarEstado(g.nombre),g]));
+    const valores=grupos.map(g=>g.promedio).filter(Number.isFinite);
+    const min=valores.length?Math.min(...valores):0,max=valores.length?Math.max(...valores):0;
+    if(capaEstados)mapaLeaflet.removeLayer(capaEstados);
+    capaEstados=L.geoJSON(limitesGeo,{
+        style:feature=>{const g=porEstado.get(claveEstado(feature));return {color:'#a4b7c9',weight:0.8,fillColor:colorPrecio(g?g.promedio:null,min,max),fillOpacity:0.88};},
+        onEachFeature:(feature,layer)=>{
+            const nombre=claveEstado(feature),g=porEstado.get(nombre);
+            layer.bindTooltip('<strong>'+esc(nombre)+'</strong><br>'+(g?('PML promedio: '+dinero(g.promedio)+'/MWh<br>NodoP: '+numero(g.nodos)+'<br>Observaciones: '+numero(g.conteo)):'Sin observaciones para los filtros actuales'),{sticky:true});
+            layer.on('click',()=>{
+                const opcion=[...$('filtroEntidad').options].find(o=>normalizarEstado(o.value)===nombre);
+                if(opcion){$('filtroEntidad').value=opcion.value;const evento=new Event('change');$('filtroEntidad').dispatchEvent(evento);}
+            });
+        }
+    }).addTo(mapaLeaflet);
+    if(!mapaLeaflet._pmlFit){mapaLeaflet.fitBounds(capaEstados.getBounds(),{padding:[12,12]});mapaLeaflet._pmlFit=true;}
+}
+function mostrarTablaEntidades(datos){
+    const grupos=agregar(datos,'entidad');
+    const tabla=$('tablaEntidades');tabla.replaceChildren();
+    if(!grupos.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=6;td.textContent='Sin observaciones para la selección.';tr.append(td);tabla.append(tr);return;}
+    for(const x of grupos){const tr=document.createElement('tr');for(const v of [x.nombre,numero(x.nodos),numero(x.conteo),dinero(x.promedio),dinero(x.max),dinero(x.min)]){const td=document.createElement('td');td.textContent=v;tr.append(td);}tabla.append(tr);}
+}
+
+function actualizarDashboard(){
+    const datos=datosFiltrados();
+    mostrarKPIs(datos);mostrarHorario(datos);mostrarDistribucion(datos);
+    mostrarAgrupado(datos,'gerencia','graficaGerencias','tablaGerencias');
+    mostrarTablaEntidades(datos);
+    actualizarMapa(datos);
+}
+async function iniciar(){
+    try{
+        const [meta,cat,observaciones]=await Promise.all([cargarJSON('metadata.json'),cargarJSON('catalogo_nodos.json'),cargarJSON('datos_dashboard.json')]);
+        metadata=meta;catalogo=cat;
+        if(observaciones.version!==1 || !Array.isArray(observaciones.registros))throw new Error('Formato inesperado en datos_dashboard.json');
+        const columnas=['proceso','sistema','nodo','hora','pml','energia','perdidas','congestion'];
+        if(JSON.stringify(observaciones.columnas)!==JSON.stringify(columnas))throw new Error('Columnas inesperadas en datos_dashboard.json');
+        const nodos=new Map(catalogo.map(x=>[LLAVE(x.sistema,x.nodo),x]));
+        registros=observaciones.registros.map(r=>{
+            const c=nodos.get(LLAVE(r[1],r[2]));
+            if(!c)throw new Error(`NodoP sin catálogo: ${r[1]} ${r[2]}`);
+            const x={proceso:r[0],sistema:r[1],nodo:r[2],hora:r[3],pml:r[4],energia:r[5],perdidas:r[6],congestion:r[7],gerencia:c.centro_control || 'Sin dato en catálogo',entidad:c.entidad || 'Sin dato en catálogo',municipio:c.municipio,nombre:c.nombre};
+            if(!Number.isFinite(x.pml)||!Number.isFinite(x.energia)||!Number.isFinite(x.perdidas)||!Number.isFinite(x.congestion))throw new Error(`Precio inválido: ${x.nodo}`);
+            const llave=x.proceso+'|'+x.sistema;
+            if(!porProcesoSistema.has(llave))porProcesoSistema.set(llave,[]);
+            porProcesoSistema.get(llave).push(x);
+            return x;
+        });
+        $('fechasDatos').innerHTML=`MDA: <strong>${esc(fechaMX(metadata?.procesos?.MDA?.fecha))}</strong><br>MTR: <strong>${esc(fechaMX(metadata?.procesos?.MTR?.fecha))}</strong>`;
+        $('filtroProceso').addEventListener('change',cascada);
+        $('filtroSistema').addEventListener('change',cascada);
+        $('filtroGerencia').addEventListener('change',cascada);
+        $('filtroEntidad').addEventListener('change',()=>{
+            const base=filtrarBase(),g=elegir('filtroGerencia'),e=elegir('filtroEntidad');
+            const nodos=unicos(base.filter(x=>(g==='TODAS'||x.gerencia===g)&&(e==='TODAS'||x.entidad===e)),'nodo');
+            actualizarSelect('filtroNodo',nodos,'Todos');actualizarDashboard();
+        });
+        $('filtroNodo').addEventListener('change',actualizarDashboard);
+        cascada();
+        iniciarMapa();
+    }catch(error){console.error(error);$('mensajeError').style.display='block';$('mensajeError').textContent='No fue posible cargar los datos: '+error.message;}
+}
+iniciar();
+</script>
+
+    
+
+  
+</body>
+</html>

@@ -1,0 +1,32 @@
+name: Procesar demanda y perdidas CENACE
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '01_INSUMOS/**'
+      - 'scripts/procesar_demanda_perdidas.py'
+      - 'scripts/seleccionar_liquidacion_vigente.py'
+      - '.github/workflows/procesar_demanda_perdidas.yml'
+permissions:
+  contents: write
+jobs:
+  procesar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Procesar archivos disponibles
+        run: |
+          python scripts/procesar_demanda_perdidas.py --entrada 01_INSUMOS --salida demanda_perdidas_data
+          python scripts/seleccionar_liquidacion_vigente.py --datos demanda_perdidas_data
+      - name: Guardar resultados
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add demanda_perdidas_data
+          if ! git diff --cached --quiet; then
+            git commit -m "Actualizar datos de demanda y perdidas"
+            git push
+          fi

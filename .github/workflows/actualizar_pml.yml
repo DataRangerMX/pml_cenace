@@ -1,3 +1,4 @@
+
 name: Actualizar PML MDA y MTR
 
 on:
@@ -7,21 +8,27 @@ on:
       timezone: "America/Mexico_City"
     - cron: "30 18 * * *"
       timezone: "America/Mexico_City"
+
 permissions:
   contents: write
 
+# Evita ejecuciones simultáneas de este workflow.
+concurrency:
+  group: actualizar-pml-main
+  cancel-in-progress: false
+
 jobs:
-
   actualizar-pml:
-
     runs-on: ubuntu-latest
-
     timeout-minutes: 30
 
     steps:
-
       - name: Descargar repositorio
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -38,15 +45,44 @@ jobs:
           python scripts/procesar_pml.py
 
       - name: Guardar datos del dashboard
+        shell: bash
         run: |
+          set -euo pipefail
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+          # Solo incorporar archivos de datos PML.
           git add dashboard_data/
 
           if git diff --cached --quiet; then
             echo "No hay cambios en los datos."
-          else
-            git commit -m "Actualizar PML MDA y MTR"
-            git push
+            exit 0
           fi
+
+          git commit -m "Actualizar PML MDA y MTR"
+
+          # Reintentar si main recibe cambios de otro commit.
+          for intento in 1 2 3; do
+            echo "Intento de publicación ${intento}/3"
+
+            git fetch origin main
+
+            # Incorporar los cambios recientes sin sobrescribirlos.
+            if ! git rebase origin/main; then
+              echo "::error::Conflicto al sincronizar main. No se sobrescribirán archivos."
+              git rebase --abort || true
+              exit 1
+            fi
+
+            if git push origin HEAD:main; then
+              echo "Datos PML publicados correctamente."
+              exit 0
+            fi
+
+            echo "La rama main cambió durante la publicación."
+            sleep 5
+          done
+
+          echo "::error::No fue posible publicar después de 3 intentos."
+          exit 1

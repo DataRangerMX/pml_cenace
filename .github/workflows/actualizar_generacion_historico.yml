@@ -1,3 +1,4 @@
+
 name: Generación SIM SEN L0 - histórico y mensual
 
 on:
@@ -6,13 +7,14 @@ on:
       modo:
         description: 'historico: carga desde 2022 / mensual: revisión de meses recientes'
         required: true
-        default: 'historico'
+        default: 'mensual'
         type: choice
         options:
           - historico
           - mensual
+
   schedule:
-    # 06:00 Ciudad de México (UTC-6), días 14 al 18; cubre retrasos de publicación.
+    # 06:00 Ciudad de México, días 14 al 18 de cada mes.
     - cron: '0 12 14-18 * *'
 
 permissions:
@@ -26,42 +28,129 @@ jobs:
   generacion:
     runs-on: ubuntu-latest
     timeout-minutes: 90
+
     steps:
       - name: Obtener repositorio
         uses: actions/checkout@v4
         with:
+          ref: main
+          fetch-depth: 0
           persist-credentials: true
+
       - name: Preparar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Instalar dependencias
-        run: python -m pip install requests beautifulsoup4
+        run: |
+          python -m pip install requests beautifulsoup4
+
       - name: Descargar y validar reportes
         shell: bash
         env:
           MODO_MANUAL: ${{ inputs.modo }}
           EVENTO: ${{ github.event_name }}
         run: |
+          set -euo pipefail
+
           if [ "$EVENTO" = "schedule" ]; then
             MODO="mensual"
           else
-            MODO="${MODO_MANUAL:-historico}"
+            MODO="${MODO_MANUAL:-mensual}"
           fi
-          python scripts/actualizar_generacion_historico.py --modo "$MODO" --desde 2022-01 --revisar-meses 2 --pausa 2
+
+          python scripts/actualizar_generacion_historico.py \
+            --modo "$MODO" \
+            --desde 2022-01 \
+            --revisar-meses 2 \
+            --pausa 2
+
+      - name: Verificar meses disponibles
+        if: success()
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+
+          ruta = Path("generacion_data/indice_generacion.json")
+
+          if not ruta.exists():
+              raise SystemExit("ERROR: no existe el índice de generación")
+
+          indice = json.loads(ruta.read_text(encoding="utf-8"))
+          periodos = {
+              registro["periodo"]
+              for registro in indice.get("periodos", [])
+          }
+
+          hoy = datetime.now(ZoneInfo("America/Mexico_City"))
+          anio = hoy.year
+          mes = hoy.month - 1
+
+          if mes == 0:
+              anio -= 1
+              mes = 12
+
+          esperado = f"{anio:04d}-{mes:02d}"
+
+          print(f"Último mes cerrado: {esperado}")
+          print(f"Meses registrados en el índice: {len(periodos)}")
+
+          if esperado in periodos:
+              print(f"OK: {esperado} disponible en el índice")
+          else:
+              print(
+                  f"::warning::El mes {esperado} aún no está "
+                  "disponible en el índice de generación."
+              )
+          PY
+
       - name: Publicar archivos validados
         if: success()
         shell: bash
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add generacion_data/
+
           if git diff --cached --quiet; then
-            echo 'Sin cambios para publicar'
-          else
-            git commit -m 'Actualizar histórico generación L0 SEN'
-            git push
+            echo "Sin cambios para publicar"
+            exit 0
           fi
+
+          git commit -m "Actualizar generación L0 SEN"
+
+          for intento in 1 2 3; do
+            echo "Intento de publicación ${intento}/3"
+
+            git fetch origin main
+
+            if ! git rebase origin/main; then
+              echo "::error::Conflicto al sincronizar main"
+              git rebase --abort || true
+              exit 1
+            fi
+
+            if git push origin HEAD:main; then
+              echo "Generación publicada correctamente"
+              exit 0
+            fi
+
+            echo "La rama main cambió. Reintentando..."
+            sleep 5
+          done
+
+          echo "::error::No fue posible publicar los datos"
+          exit 1
+
       - name: Guardar resultados como artifact
         if: always()
         uses: actions/upload-artifact@v4

@@ -3,649 +3,649 @@
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 1,
-    "pml": 404.7,
-    "energia": 402.22,
-    "perdidas": 2.48,
+    "pml": 424.94,
+    "energia": 422.55,
+    "perdidas": 2.39,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 2,
-    "pml": 392.3,
-    "energia": 389.87,
-    "perdidas": 2.42,
+    "pml": 425.76,
+    "energia": 422.82,
+    "perdidas": 2.94,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 3,
-    "pml": 356.73,
-    "energia": 354.41,
-    "perdidas": 2.32,
+    "pml": 408.36,
+    "energia": 405.34,
+    "perdidas": 3.02,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 4,
-    "pml": 340.37,
-    "energia": 338.17,
-    "perdidas": 2.2,
+    "pml": 366.91,
+    "energia": 364.22,
+    "perdidas": 2.69,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 5,
-    "pml": 340.38,
-    "energia": 338.49,
-    "perdidas": 1.89,
+    "pml": 329.78,
+    "energia": 327.35,
+    "perdidas": 2.43,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 6,
-    "pml": 383.36,
-    "energia": 381.17,
-    "perdidas": 2.19,
+    "pml": 408.53,
+    "energia": 405.54,
+    "perdidas": 2.99,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 7,
-    "pml": 402.34,
-    "energia": 400.31,
-    "perdidas": 2.02,
+    "pml": 426.46,
+    "energia": 423.61,
+    "perdidas": 2.85,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 8,
-    "pml": 402.89,
-    "energia": 401.81,
-    "perdidas": 1.08,
+    "pml": 425.91,
+    "energia": 423.61,
+    "perdidas": 2.3,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 9,
-    "pml": 394.4,
-    "energia": 393.73,
-    "perdidas": 0.67,
+    "pml": 412.8,
+    "energia": 411.77,
+    "perdidas": 1.02,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 10,
-    "pml": 395.38,
-    "energia": 394.92,
-    "perdidas": 0.46,
+    "pml": 423.06,
+    "energia": 422.05,
+    "perdidas": 1.01,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 11,
-    "pml": 411.67,
-    "energia": 411.35,
-    "perdidas": 0.32,
-    "congestion": 0.0
+    "pml": 433.58,
+    "energia": 432.82,
+    "perdidas": 0.98,
+    "congestion": -0.22
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 12,
-    "pml": 393.39,
-    "energia": 393.68,
-    "perdidas": -0.29,
-    "congestion": 0.0
+    "pml": 420.56,
+    "energia": 442.88,
+    "perdidas": 1.3,
+    "congestion": -23.62
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 13,
-    "pml": 429.98,
-    "energia": 429.58,
-    "perdidas": 0.4,
-    "congestion": 0.0
+    "pml": 442.16,
+    "energia": 445.84,
+    "perdidas": 1.42,
+    "congestion": -5.11
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 14,
-    "pml": 512.58,
-    "energia": 511.73,
-    "perdidas": 0.85,
-    "congestion": 0.0
+    "pml": 454.18,
+    "energia": 458.37,
+    "perdidas": 1.57,
+    "congestion": -5.76
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 15,
-    "pml": 527.7,
-    "energia": 526.57,
-    "perdidas": 1.13,
-    "congestion": 0.0
+    "pml": 465.79,
+    "energia": 475.83,
+    "perdidas": 1.74,
+    "congestion": -11.78
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "hora": 16,
-    "pml": 527.65,
-    "energia": 526.45,
-    "perdidas": 1.2,
-    "congestion": 0.0
-  },
-  {
-    "proceso": "MDA",
-    "sistema": "BCA",
-    "hora": 17,
-    "pml": 439.82,
-    "energia": 438.82,
-    "perdidas": 1.0,
-    "congestion": 0.0
-  },
-  {
-    "proceso": "MDA",
-    "sistema": "BCA",
-    "hora": 18,
-    "pml": 517.88,
-    "energia": 515.88,
-    "perdidas": 2.0,
-    "congestion": 0.0
-  },
-  {
-    "proceso": "MDA",
-    "sistema": "BCA",
-    "hora": 19,
-    "pml": 520.24,
-    "energia": 518.05,
-    "perdidas": 2.19,
-    "congestion": 0.0
-  },
-  {
-    "proceso": "MDA",
-    "sistema": "BCA",
-    "hora": 20,
-    "pml": 526.49,
-    "energia": 523.68,
-    "perdidas": 2.81,
-    "congestion": 0.0
-  },
-  {
-    "proceso": "MDA",
-    "sistema": "BCA",
-    "hora": 21,
-    "pml": 520.7,
-    "energia": 518.05,
-    "perdidas": 2.65,
-    "congestion": 0.0
-  },
-  {
-    "proceso": "MDA",
-    "sistema": "BCA",
-    "hora": 22,
-    "pml": 448.87,
-    "energia": 446.66,
-    "perdidas": 2.21,
-    "congestion": 0.0
-  },
-  {
-    "proceso": "MDA",
-    "sistema": "BCA",
-    "hora": 23,
-    "pml": 418.73,
-    "energia": 416.89,
+    "pml": 477.16,
+    "energia": 475.32,
     "perdidas": 1.84,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
+    "hora": 17,
+    "pml": 554.22,
+    "energia": 551.47,
+    "perdidas": 2.74,
+    "congestion": 0.0
+  },
+  {
+    "proceso": "MDA",
+    "sistema": "BCA",
+    "hora": 18,
+    "pml": 568.64,
+    "energia": 564.04,
+    "perdidas": 4.59,
+    "congestion": 0.0
+  },
+  {
+    "proceso": "MDA",
+    "sistema": "BCA",
+    "hora": 19,
+    "pml": 559.55,
+    "energia": 554.96,
+    "perdidas": 4.59,
+    "congestion": 0.0
+  },
+  {
+    "proceso": "MDA",
+    "sistema": "BCA",
+    "hora": 20,
+    "pml": 557.07,
+    "energia": 552.5,
+    "perdidas": 4.57,
+    "congestion": 0.0
+  },
+  {
+    "proceso": "MDA",
+    "sistema": "BCA",
+    "hora": 21,
+    "pml": 550.5,
+    "energia": 546.27,
+    "perdidas": 4.23,
+    "congestion": 0.0
+  },
+  {
+    "proceso": "MDA",
+    "sistema": "BCA",
+    "hora": 22,
+    "pml": 470.32,
+    "energia": 466.3,
+    "perdidas": 4.02,
+    "congestion": 0.0
+  },
+  {
+    "proceso": "MDA",
+    "sistema": "BCA",
+    "hora": 23,
+    "pml": 434.11,
+    "energia": 430.92,
+    "perdidas": 3.19,
+    "congestion": 0.0
+  },
+  {
+    "proceso": "MDA",
+    "sistema": "BCA",
     "hora": 24,
-    "pml": 437.57,
-    "energia": 435.22,
-    "perdidas": 2.36,
+    "pml": 427.06,
+    "energia": 423.64,
+    "perdidas": 3.42,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 1,
-    "pml": 4339.95,
-    "energia": 4367.14,
-    "perdidas": -27.19,
+    "pml": 4925.93,
+    "energia": 4954.59,
+    "perdidas": -28.65,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 2,
-    "pml": 5699.79,
-    "energia": 5182.06,
-    "perdidas": -40.02,
-    "congestion": 557.76
+    "pml": 4875.59,
+    "energia": 4908.58,
+    "perdidas": -32.98,
+    "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 3,
-    "pml": 4183.28,
-    "energia": 4217.76,
-    "perdidas": -34.48,
+    "pml": 5141.85,
+    "energia": 5182.11,
+    "perdidas": -40.26,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 4,
-    "pml": 5182.02,
-    "energia": 5227.57,
-    "perdidas": -45.55,
+    "pml": 5038.93,
+    "energia": 5084.38,
+    "perdidas": -45.45,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 5,
-    "pml": 4082.77,
-    "energia": 4119.56,
-    "perdidas": -36.79,
+    "pml": 4991.38,
+    "energia": 5040.66,
+    "perdidas": -49.28,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 6,
-    "pml": 3804.25,
-    "energia": 3838.69,
-    "perdidas": -34.44,
+    "pml": 4998.21,
+    "energia": 5051.0,
+    "perdidas": -52.8,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 7,
-    "pml": 4697.15,
-    "energia": 4710.91,
-    "perdidas": -13.77,
+    "pml": 5027.02,
+    "energia": 5073.51,
+    "perdidas": -46.5,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 8,
-    "pml": 4853.54,
-    "energia": 4884.71,
-    "perdidas": -31.17,
-    "congestion": 0.0
+    "pml": 5007.29,
+    "energia": 4975.72,
+    "perdidas": -62.81,
+    "congestion": 94.37
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 9,
-    "pml": 4598.99,
-    "energia": 5225.54,
-    "perdidas": -44.98,
-    "congestion": -581.57
+    "pml": 5215.4,
+    "energia": 5078.19,
+    "perdidas": -68.31,
+    "congestion": 205.52
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 10,
-    "pml": 4626.84,
-    "energia": 5555.72,
-    "perdidas": -68.28,
-    "congestion": -860.6
+    "pml": 5113.47,
+    "energia": 4863.28,
+    "perdidas": -96.36,
+    "congestion": 346.55
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 11,
-    "pml": 4358.31,
-    "energia": 5410.71,
-    "perdidas": -38.22,
-    "congestion": -1014.18
-  },
-  {
-    "proceso": "MDA",
-    "sistema": "BCS",
-    "hora": 12,
-    "pml": 5108.09,
-    "energia": 4774.49,
+    "pml": 4522.98,
+    "energia": 4094.24,
     "perdidas": -50.75,
-    "congestion": 384.36
+    "congestion": 479.48
+  },
+  {
+    "proceso": "MDA",
+    "sistema": "BCS",
+    "hora": 12,
+    "pml": 5111.91,
+    "energia": 4786.69,
+    "perdidas": -77.09,
+    "congestion": 402.3
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 13,
-    "pml": 5364.58,
-    "energia": 5414.57,
-    "perdidas": -49.99,
-    "congestion": 0.0
+    "pml": 5261.68,
+    "energia": 4763.47,
+    "perdidas": -70.15,
+    "congestion": 568.37
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 14,
-    "pml": 5432.42,
-    "energia": 5353.57,
-    "perdidas": -40.96,
-    "congestion": 119.81
+    "pml": 5266.58,
+    "energia": 5049.38,
+    "perdidas": -75.7,
+    "congestion": 292.9
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 15,
-    "pml": 4646.43,
-    "energia": 3829.49,
-    "perdidas": -19.81,
-    "congestion": 836.74
+    "pml": 5439.52,
+    "energia": 5506.9,
+    "perdidas": -67.39,
+    "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 16,
-    "pml": 5357.34,
-    "energia": 5329.81,
-    "perdidas": -45.43,
-    "congestion": 72.96
+    "pml": 5374.54,
+    "energia": 5216.51,
+    "perdidas": -73.98,
+    "congestion": 232.01
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 17,
-    "pml": 5068.51,
-    "energia": 5098.9,
-    "perdidas": -30.39,
+    "pml": 5055.96,
+    "energia": 5120.5,
+    "perdidas": -64.53,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 18,
-    "pml": 5160.17,
-    "energia": 5180.88,
-    "perdidas": -20.71,
+    "pml": 5125.03,
+    "energia": 5171.27,
+    "perdidas": -46.24,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 19,
-    "pml": 5459.7,
-    "energia": 5464.59,
-    "perdidas": -4.88,
+    "pml": 5178.68,
+    "energia": 5214.49,
+    "perdidas": -35.81,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 20,
-    "pml": 5413.9,
-    "energia": 5423.81,
-    "perdidas": -9.91,
+    "pml": 5215.11,
+    "energia": 5253.09,
+    "perdidas": -37.98,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 21,
-    "pml": 5428.7,
-    "energia": 5428.88,
-    "perdidas": -0.18,
+    "pml": 5151.6,
+    "energia": 5182.02,
+    "perdidas": -30.42,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 22,
-    "pml": 5587.6,
-    "energia": 5589.5,
-    "perdidas": -1.9,
+    "pml": 5467.63,
+    "energia": 5495.43,
+    "perdidas": -27.8,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 23,
-    "pml": 5376.33,
-    "energia": 5404.21,
-    "perdidas": -27.88,
+    "pml": 5376.82,
+    "energia": 5408.34,
+    "perdidas": -31.52,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "hora": 24,
-    "pml": 5284.93,
-    "energia": 5312.36,
-    "perdidas": -27.43,
+    "pml": 5264.39,
+    "energia": 5289.58,
+    "perdidas": -25.19,
     "congestion": 0.0
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 1,
-    "pml": 1352.44,
-    "energia": 640.36,
-    "perdidas": 15.71,
-    "congestion": 696.37
+    "pml": 2278.2,
+    "energia": 2038.5,
+    "perdidas": 37.9,
+    "congestion": 201.8
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 2,
-    "pml": 1317.21,
-    "energia": 519.36,
-    "perdidas": 10.98,
-    "congestion": 786.87
+    "pml": 1592.83,
+    "energia": 1043.66,
+    "perdidas": 19.68,
+    "congestion": 529.49
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 3,
-    "pml": 757.0,
-    "energia": 482.97,
-    "perdidas": 9.84,
-    "congestion": 264.19
+    "pml": 1134.84,
+    "energia": 756.76,
+    "perdidas": 17.09,
+    "congestion": 360.99
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 4,
-    "pml": 572.81,
-    "energia": 499.27,
-    "perdidas": 9.03,
-    "congestion": 64.51
+    "pml": 1125.27,
+    "energia": 742.82,
+    "perdidas": 15.74,
+    "congestion": 366.71
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 5,
-    "pml": 540.41,
-    "energia": 485.3,
-    "perdidas": 6.77,
-    "congestion": 48.34
+    "pml": 705.38,
+    "energia": 712.86,
+    "perdidas": 12.87,
+    "congestion": -20.35
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 6,
-    "pml": 523.13,
-    "energia": 492.05,
-    "perdidas": 6.24,
-    "congestion": 24.84
+    "pml": 715.32,
+    "energia": 728.55,
+    "perdidas": 10.41,
+    "congestion": -23.65
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 7,
-    "pml": 521.43,
-    "energia": 529.02,
-    "perdidas": 7.42,
-    "congestion": -15.01
+    "pml": 774.09,
+    "energia": 791.56,
+    "perdidas": 8.92,
+    "congestion": -26.39
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 8,
-    "pml": 510.26,
-    "energia": 492.35,
-    "perdidas": 2.3,
-    "congestion": 15.62
+    "pml": 620.19,
+    "energia": 626.78,
+    "perdidas": 5.77,
+    "congestion": -12.36
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 9,
-    "pml": 549.63,
-    "energia": 462.97,
-    "perdidas": 0.72,
-    "congestion": 85.94
+    "pml": 582.54,
+    "energia": 595.79,
+    "perdidas": 2.98,
+    "congestion": -16.23
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 10,
-    "pml": 678.1,
-    "energia": 469.85,
-    "perdidas": 2.21,
-    "congestion": 206.05
+    "pml": 568.68,
+    "energia": 594.86,
+    "perdidas": 8.34,
+    "congestion": -34.52
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 11,
-    "pml": 974.06,
-    "energia": 265.45,
-    "perdidas": -0.87,
-    "congestion": 709.49
+    "pml": 564.43,
+    "energia": 585.27,
+    "perdidas": 9.75,
+    "congestion": -30.6
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 12,
-    "pml": 684.86,
-    "energia": 457.78,
-    "perdidas": -0.18,
-    "congestion": 227.26
+    "pml": 545.61,
+    "energia": 564.7,
+    "perdidas": 8.7,
+    "congestion": -27.8
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 13,
-    "pml": 698.21,
-    "energia": 482.35,
-    "perdidas": 1.22,
-    "congestion": 214.64
+    "pml": 580.4,
+    "energia": 529.59,
+    "perdidas": 8.56,
+    "congestion": 42.25
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 14,
-    "pml": 548.71,
-    "energia": 489.17,
-    "perdidas": 2.55,
-    "congestion": 56.99
+    "pml": 1021.64,
+    "energia": 529.25,
+    "perdidas": 3.65,
+    "congestion": 488.74
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 15,
-    "pml": 594.69,
-    "energia": 518.17,
-    "perdidas": 5.28,
-    "congestion": 71.25
+    "pml": 823.1,
+    "energia": 572.81,
+    "perdidas": 11.42,
+    "congestion": 238.87
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 16,
-    "pml": 640.66,
-    "energia": 541.19,
-    "perdidas": 5.99,
-    "congestion": 93.48
+    "pml": 1343.41,
+    "energia": 646.32,
+    "perdidas": 4.81,
+    "congestion": 692.28
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 17,
-    "pml": 621.98,
-    "energia": 543.88,
-    "perdidas": 6.58,
-    "congestion": 71.52
+    "pml": 1419.7,
+    "energia": 726.98,
+    "perdidas": 8.03,
+    "congestion": 684.69
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 18,
-    "pml": 717.97,
-    "energia": 595.47,
-    "perdidas": 5.84,
-    "congestion": 116.66
+    "pml": 1603.36,
+    "energia": 971.45,
+    "perdidas": 12.71,
+    "congestion": 619.2
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 19,
-    "pml": 2963.51,
-    "energia": 2027.54,
-    "perdidas": 35.82,
-    "congestion": 900.15
+    "pml": 1683.8,
+    "energia": 1079.23,
+    "perdidas": 16.8,
+    "congestion": 587.77
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 20,
-    "pml": 3911.71,
-    "energia": 2989.15,
-    "perdidas": 68.98,
-    "congestion": 853.57
+    "pml": 1646.55,
+    "energia": 1002.93,
+    "perdidas": 13.78,
+    "congestion": 629.84
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 21,
-    "pml": 1352.19,
-    "energia": 932.13,
-    "perdidas": 19.85,
-    "congestion": 400.21
+    "pml": 1689.46,
+    "energia": 1015.38,
+    "perdidas": 15.97,
+    "congestion": 658.11
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 22,
-    "pml": 1167.29,
-    "energia": 767.39,
-    "perdidas": 16.94,
-    "congestion": 382.96
+    "pml": 1777.35,
+    "energia": 1061.1,
+    "perdidas": 17.6,
+    "congestion": 698.65
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 23,
-    "pml": 1533.77,
-    "energia": 782.18,
-    "perdidas": 17.25,
-    "congestion": 734.33
+    "pml": 1571.14,
+    "energia": 870.31,
+    "perdidas": 15.45,
+    "congestion": 685.39
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "hora": 24,
-    "pml": 1976.66,
-    "energia": 1117.0,
-    "perdidas": 24.58,
-    "congestion": 835.07
+    "pml": 1305.39,
+    "energia": 674.66,
+    "perdidas": 11.42,
+    "congestion": 619.31
   },
   {
     "proceso": "MTR",

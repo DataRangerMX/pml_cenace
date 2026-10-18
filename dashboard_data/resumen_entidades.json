@@ -4,315 +4,315 @@
     "sistema": "BCA",
     "entidad": "BAJA CALIFORNIA",
     "nodos": 112,
-    "pml_promedio": 557.85,
-    "pml_max": 1387.65,
-    "pml_min": 355.7
+    "pml_promedio": 521.88,
+    "pml_max": 1356.17,
+    "pml_min": 64.32
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "entidad": "No Aplica",
     "nodos": 2,
-    "pml_promedio": 546.77,
+    "pml_promedio": 513.94,
     "pml_max": 1200.0,
-    "pml_min": 357.54
+    "pml_min": 64.49
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "entidad": "SONORA",
     "nodos": 7,
-    "pml_promedio": 541.09,
-    "pml_max": 1174.12,
-    "pml_min": 357.86
+    "pml_promedio": 512.01,
+    "pml_max": 1190.79,
+    "pml_min": 63.85
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "entidad": "BAJA CALIFORNIA SUR",
     "nodos": 31,
-    "pml_promedio": 5063.49,
-    "pml_max": 5829.26,
-    "pml_min": 3611.02
+    "pml_promedio": 4668.18,
+    "pml_max": 5792.5,
+    "pml_min": 3382.58
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "AGUASCALIENTES",
     "nodos": 44,
-    "pml_promedio": 695.64,
-    "pml_max": 1908.55,
-    "pml_min": 444.67
+    "pml_promedio": 539.03,
+    "pml_max": 1247.96,
+    "pml_min": 357.37
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "CAMPECHE",
     "nodos": 22,
-    "pml_promedio": 1596.73,
-    "pml_max": 3878.64,
-    "pml_min": 501.99
+    "pml_promedio": 709.43,
+    "pml_max": 1551.69,
+    "pml_min": 407.66
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "CHIAPAS",
     "nodos": 62,
-    "pml_promedio": 1560.04,
-    "pml_max": 3865.56,
-    "pml_min": 499.83
+    "pml_promedio": 690.76,
+    "pml_max": 1546.38,
+    "pml_min": 405.43
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "CHIHUAHUA",
     "nodos": 171,
-    "pml_promedio": 431.04,
-    "pml_max": 1312.43,
-    "pml_min": 166.8
+    "pml_promedio": 357.46,
+    "pml_max": 937.87,
+    "pml_min": 119.14
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "CIUDAD DE MEXICO",
     "nodos": 55,
-    "pml_promedio": 1227.15,
-    "pml_max": 3358.44,
-    "pml_min": 471.86
+    "pml_promedio": 621.39,
+    "pml_max": 1344.17,
+    "pml_min": 394.19
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "COAHUILA DE ZARAGOZA",
     "nodos": 86,
-    "pml_promedio": 598.59,
-    "pml_max": 1663.71,
-    "pml_min": 283.23
+    "pml_promedio": 486.09,
+    "pml_max": 1163.07,
+    "pml_min": 209.6
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "COLIMA",
     "nodos": 27,
-    "pml_promedio": 768.18,
-    "pml_max": 2347.64,
-    "pml_min": 454.44
+    "pml_promedio": 552.27,
+    "pml_max": 1284.57,
+    "pml_min": 369.69
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "DURANGO",
     "nodos": 59,
-    "pml_promedio": 631.82,
-    "pml_max": 1873.75,
-    "pml_min": 329.04
+    "pml_promedio": 509.24,
+    "pml_max": 1319.27,
+    "pml_min": 241.99
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "GUANAJUATO",
     "nodos": 156,
-    "pml_promedio": 704.23,
-    "pml_max": 2295.18,
-    "pml_min": 442.97
+    "pml_promedio": 540.41,
+    "pml_max": 1225.48,
+    "pml_min": 356.85
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "GUERRERO",
     "nodos": 73,
-    "pml_promedio": 1248.41,
-    "pml_max": 3538.33,
-    "pml_min": 479.5
+    "pml_promedio": 657.95,
+    "pml_max": 1626.8,
+    "pml_min": 386.57
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "HIDALGO",
     "nodos": 37,
-    "pml_promedio": 752.78,
-    "pml_max": 3937.75,
-    "pml_min": 233.37
+    "pml_promedio": 550.18,
+    "pml_max": 1447.97,
+    "pml_min": 370.75
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "JALISCO",
     "nodos": 177,
-    "pml_promedio": 766.59,
-    "pml_max": 2259.23,
-    "pml_min": 448.27
+    "pml_promedio": 560.29,
+    "pml_max": 1317.29,
+    "pml_min": 356.61
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "MEXICO",
     "nodos": 143,
-    "pml_promedio": 1139.77,
-    "pml_max": 3399.62,
-    "pml_min": -1426.05
+    "pml_promedio": 610.8,
+    "pml_max": 1354.84,
+    "pml_min": 219.49
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "MICHOACAN DE OCAMPO",
     "nodos": 115,
-    "pml_promedio": 863.24,
-    "pml_max": 3012.52,
-    "pml_min": 452.08
+    "pml_promedio": 576.32,
+    "pml_max": 1366.68,
+    "pml_min": 369.77
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "MORELOS",
     "nodos": 27,
-    "pml_promedio": 1347.44,
-    "pml_max": 3242.91,
-    "pml_min": 490.73
+    "pml_promedio": 644.43,
+    "pml_max": 1374.67,
+    "pml_min": 401.41
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "NAYARIT",
     "nodos": 27,
-    "pml_promedio": 769.08,
-    "pml_max": 2231.39,
-    "pml_min": 458.79
+    "pml_promedio": 568.41,
+    "pml_max": 1368.63,
+    "pml_min": 371.55
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "NUEVO LEON",
     "nodos": 140,
-    "pml_promedio": 589.88,
-    "pml_max": 2338.77,
-    "pml_min": 378.33
+    "pml_promedio": 484.38,
+    "pml_max": 1071.42,
+    "pml_min": 316.14
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "No Aplica",
     "nodos": 7,
-    "pml_promedio": 872.91,
-    "pml_max": 3845.78,
-    "pml_min": 196.61
+    "pml_promedio": 536.85,
+    "pml_max": 1516.39,
+    "pml_min": 141.74
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "OAXACA",
     "nodos": 67,
-    "pml_promedio": 1529.32,
-    "pml_max": 3881.62,
-    "pml_min": 474.07
+    "pml_promedio": 681.43,
+    "pml_max": 1647.92,
+    "pml_min": 391.07
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "PUEBLA",
     "nodos": 84,
-    "pml_promedio": 1418.06,
-    "pml_max": 3921.25,
-    "pml_min": 420.53
+    "pml_promedio": 646.17,
+    "pml_max": 1497.74,
+    "pml_min": 385.57
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "QUERETARO",
     "nodos": 70,
-    "pml_promedio": 683.18,
-    "pml_max": 2544.87,
-    "pml_min": 455.28
+    "pml_promedio": 537.97,
+    "pml_max": 1187.8,
+    "pml_min": 371.78
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "QUINTANA ROO",
     "nodos": 47,
-    "pml_promedio": 2023.83,
-    "pml_max": 11617.06,
-    "pml_min": 533.38
+    "pml_promedio": 1118.49,
+    "pml_max": 11977.3,
+    "pml_min": 428.72
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "SAN LUIS POTOSI",
     "nodos": 99,
-    "pml_promedio": 648.69,
-    "pml_max": 1949.17,
-    "pml_min": 433.65
+    "pml_promedio": 532.48,
+    "pml_max": 1274.11,
+    "pml_min": 349.36
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "SINALOA",
     "nodos": 69,
-    "pml_promedio": 634.57,
-    "pml_max": 1982.0,
-    "pml_min": 114.75
+    "pml_promedio": 492.01,
+    "pml_max": 1396.05,
+    "pml_min": -2.95
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "SONORA",
     "nodos": 148,
-    "pml_promedio": 352.21,
-    "pml_max": 751.48,
-    "pml_min": 1.39
+    "pml_promedio": 264.99,
+    "pml_max": 501.18,
+    "pml_min": -4.73
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "TABASCO",
     "nodos": 51,
-    "pml_promedio": 1553.35,
-    "pml_max": 3843.49,
-    "pml_min": 500.12
+    "pml_promedio": 680.58,
+    "pml_max": 1525.09,
+    "pml_min": 404.38
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "TAMAULIPAS",
     "nodos": 101,
-    "pml_promedio": 545.33,
-    "pml_max": 1569.8,
-    "pml_min": 267.48
+    "pml_promedio": 487.15,
+    "pml_max": 1167.57,
+    "pml_min": 313.99
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "TLAXCALA",
     "nodos": 34,
-    "pml_promedio": 1449.29,
-    "pml_max": 3939.17,
-    "pml_min": 480.36
+    "pml_promedio": 646.2,
+    "pml_max": 1449.17,
+    "pml_min": 392.14
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "VERACRUZ DE IGNACIO DE LA LLAVE",
     "nodos": 167,
-    "pml_promedio": 1373.69,
-    "pml_max": 6999.79,
-    "pml_min": -215.64
+    "pml_promedio": 630.32,
+    "pml_max": 1428.08,
+    "pml_min": 360.99
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "YUCATAN",
     "nodos": 46,
-    "pml_promedio": 1587.35,
-    "pml_max": 3843.81,
-    "pml_min": 509.63
+    "pml_promedio": 697.58,
+    "pml_max": 1511.84,
+    "pml_min": 412.48
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "entidad": "ZACATECAS",
     "nodos": 47,
-    "pml_promedio": 712.43,
-    "pml_max": 2041.74,
-    "pml_min": 417.47
+    "pml_promedio": 552.58,
+    "pml_max": 1335.26,
+    "pml_min": 337.03
   },
   {
     "proceso": "MTR",

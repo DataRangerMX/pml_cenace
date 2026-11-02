@@ -1,11 +1,11 @@
 {
-  "actualizado_utc": "2026-11-01T01:41:58.215216+00:00",
+  "actualizado_utc": "2026-11-02T00:11:15.909128+00:00",
   "procesos": {
     "MDA": {
-      "fecha": "2026-11-01"
+      "fecha": "2026-11-02"
     },
     "MTR": {
-      "fecha": "2026-10-24"
+      "fecha": "2026-10-25"
     }
   },
   "sistemas": [
@@ -14,5 +14,5 @@
     "BCS"
   ],
   "nodos_catalogo": 2610,
-  "observaciones": 125401
+  "observaciones": 125280
 }

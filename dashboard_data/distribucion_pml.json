@@ -4,56 +4,56 @@
     "sistema": "SIN",
     "orden": 1,
     "rango": "<0",
-    "observaciones": 36,
-    "participacion": 0.06
+    "observaciones": 542,
+    "participacion": 0.92
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "orden": 2,
     "rango": "0-500",
-    "observaciones": 23121,
-    "participacion": 39.19
+    "observaciones": 18171,
+    "participacion": 30.8
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "orden": 3,
     "rango": "500-1,000",
-    "observaciones": 15507,
-    "participacion": 26.29
+    "observaciones": 12031,
+    "participacion": 20.39
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "orden": 4,
     "rango": "1,000-2,000",
-    "observaciones": 6971,
-    "participacion": 11.82
+    "observaciones": 13820,
+    "participacion": 23.43
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "orden": 5,
     "rango": "2,000-5,000",
-    "observaciones": 11751,
-    "participacion": 19.92
+    "observaciones": 13154,
+    "participacion": 22.3
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "orden": 6,
     "rango": "5,000-10,000",
-    "observaciones": 1591,
-    "participacion": 2.7
+    "observaciones": 1274,
+    "participacion": 2.16
   },
   {
     "proceso": "MDA",
     "sistema": "SIN",
     "orden": 7,
     "rango": "10,000 o más",
-    "observaciones": 15,
-    "participacion": 0.03
+    "observaciones": 0,
+    "participacion": 0.0
   },
   {
     "proceso": "MDA",
@@ -68,16 +68,16 @@
     "sistema": "BCA",
     "orden": 2,
     "rango": "0-500",
-    "observaciones": 1296,
-    "participacion": 44.63
+    "observaciones": 2750,
+    "participacion": 94.7
   },
   {
     "proceso": "MDA",
     "sistema": "BCA",
     "orden": 3,
     "rango": "500-1,000",
-    "observaciones": 1608,
-    "participacion": 55.37
+    "observaciones": 154,
+    "participacion": 5.3
   },
   {
     "proceso": "MDA",
@@ -148,16 +148,16 @@
     "sistema": "BCS",
     "orden": 5,
     "rango": "2,000-5,000",
-    "observaciones": 70,
-    "participacion": 9.41
+    "observaciones": 113,
+    "participacion": 15.19
   },
   {
     "proceso": "MDA",
     "sistema": "BCS",
     "orden": 6,
     "rango": "5,000-10,000",
-    "observaciones": 674,
-    "participacion": 90.59
+    "observaciones": 631,
+    "participacion": 84.81
   },
   {
     "proceso": "MDA",

@@ -180,31 +180,31 @@
     "sistema": "SIN",
     "orden": 2,
     "rango": "0-500",
-    "observaciones": 41809,
-    "participacion": 70.87
+    "observaciones": 43711,
+    "participacion": 74.1
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "orden": 3,
     "rango": "500-1,000",
-    "observaciones": 17131,
-    "participacion": 29.04
+    "observaciones": 12644,
+    "participacion": 21.43
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "orden": 4,
     "rango": "1,000-2,000",
-    "observaciones": 1,
-    "participacion": 0.0
+    "observaciones": 2598,
+    "participacion": 4.4
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "orden": 5,
     "rango": "2,000-5,000",
-    "observaciones": 3,
+    "observaciones": 6,
     "participacion": 0.01
   },
   {
@@ -212,8 +212,8 @@
     "sistema": "SIN",
     "orden": 6,
     "rango": "5,000-10,000",
-    "observaciones": 48,
-    "participacion": 0.08
+    "observaciones": 33,
+    "participacion": 0.06
   },
   {
     "proceso": "MTR",
@@ -236,16 +236,16 @@
     "sistema": "BCA",
     "orden": 2,
     "rango": "0-500",
-    "observaciones": 1568,
-    "participacion": 53.99
+    "observaciones": 2318,
+    "participacion": 79.82
   },
   {
     "proceso": "MTR",
     "sistema": "BCA",
     "orden": 3,
     "rango": "500-1,000",
-    "observaciones": 1336,
-    "participacion": 46.01
+    "observaciones": 586,
+    "participacion": 20.18
   },
   {
     "proceso": "MTR",
@@ -316,16 +316,16 @@
     "sistema": "BCS",
     "orden": 5,
     "rango": "2,000-5,000",
-    "observaciones": 141,
-    "participacion": 18.95
+    "observaciones": 157,
+    "participacion": 21.1
   },
   {
     "proceso": "MTR",
     "sistema": "BCS",
     "orden": 6,
     "rango": "5,000-10,000",
-    "observaciones": 603,
-    "participacion": 81.05
+    "observaciones": 587,
+    "participacion": 78.9
   },
   {
     "proceso": "MTR",

@@ -573,6 +573,16 @@
       "archivo_fuente": "Generacion Liquidada_L0 SEN septiembre 2026 v2026 10 14_05 00 01.csv",
       "archivo_json": "generacion_L0_SEN_2026-09.json",
       "sha256_csv": "28dbaa7cff8bbd25cacb0d8357752cef54e1e7d26f93f0697c74c2aafc1493f1"
+    },
+    {
+      "periodo": "2026-10",
+      "sistema": "SEN",
+      "liquidacion": "L0",
+      "horas": 744,
+      "total_mwh": 30905683.4336,
+      "archivo_fuente": "Generacion Liquidada_L0 SEN octubre 2026 v2026 11 14_05 00 01.csv",
+      "archivo_json": "generacion_L0_SEN_2026-10.json",
+      "sha256_csv": "5a0f847e1d70e14884497ec8ea3972a8c2700e166ade18d7d9fa0cbe5f107dcb"
     }
   ]
 }

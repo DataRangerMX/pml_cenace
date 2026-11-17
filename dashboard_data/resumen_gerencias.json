@@ -103,98 +103,98 @@
     "sistema": "BCA",
     "gerencia": "BAJA CALIFORNIA",
     "nodos": 119,
-    "pml_promedio": 488.93,
-    "pml_max": 805.15,
-    "pml_min": 353.02
+    "pml_promedio": 534.67,
+    "pml_max": 971.53,
+    "pml_min": 345.66
   },
   {
     "proceso": "MTR",
     "sistema": "BCA",
     "gerencia": "No Aplica",
     "nodos": 2,
-    "pml_promedio": 473.54,
-    "pml_max": 700.21,
-    "pml_min": 353.59
+    "pml_promedio": 523.07,
+    "pml_max": 845.53,
+    "pml_min": 353.68
   },
   {
     "proceso": "MTR",
     "sistema": "BCS",
     "gerencia": "BAJA CALIFORNIA SUR",
     "nodos": 31,
-    "pml_promedio": 5559.02,
-    "pml_max": 6268.11,
-    "pml_min": 3654.53
+    "pml_promedio": 5472.35,
+    "pml_max": 6111.58,
+    "pml_min": 3745.93
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "gerencia": "CENTRAL",
     "nodos": 261,
-    "pml_promedio": 1083.89,
-    "pml_max": 5204.78,
-    "pml_min": -421.35
+    "pml_promedio": 1011.53,
+    "pml_max": 3343.2,
+    "pml_min": -399.89
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "gerencia": "NORESTE",
     "nodos": 311,
-    "pml_promedio": 687.46,
-    "pml_max": 2979.54,
-    "pml_min": 545.04
+    "pml_promedio": 669.39,
+    "pml_max": 1095.13,
+    "pml_min": 584.99
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "gerencia": "NOROESTE",
     "nodos": 217,
-    "pml_promedio": 508.16,
-    "pml_max": 2436.35,
-    "pml_min": 216.22
+    "pml_promedio": 463.47,
+    "pml_max": 1050.38,
+    "pml_min": 216.48
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "gerencia": "NORTE",
     "nodos": 269,
-    "pml_promedio": 528.77,
-    "pml_max": 2596.04,
-    "pml_min": 274.7
+    "pml_promedio": 470.6,
+    "pml_max": 975.75,
+    "pml_min": 139.47
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "gerencia": "No Aplica",
     "nodos": 7,
-    "pml_promedio": 727.86,
-    "pml_max": 4189.49,
-    "pml_min": 279.78
+    "pml_promedio": 671.54,
+    "pml_max": 2042.79,
+    "pml_min": 169.51
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "gerencia": "OCCIDENTAL",
     "nodos": 732,
-    "pml_promedio": 810.74,
-    "pml_max": 4392.4,
-    "pml_min": 323.78
+    "pml_promedio": 780.86,
+    "pml_max": 2821.78,
+    "pml_min": 275.7
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "gerencia": "ORIENTAL",
     "nodos": 546,
-    "pml_promedio": 1092.88,
-    "pml_max": 4789.05,
-    "pml_min": 556.74
+    "pml_promedio": 1015.71,
+    "pml_max": 2686.85,
+    "pml_min": 646.98
   },
   {
     "proceso": "MTR",
     "sistema": "SIN",
     "gerencia": "PENINSULAR",
     "nodos": 115,
-    "pml_promedio": 1307.36,
-    "pml_max": 10137.73,
-    "pml_min": 658.33
+    "pml_promedio": 1168.31,
+    "pml_max": 7241.6,
+    "pml_min": 754.97
   }
 ]
